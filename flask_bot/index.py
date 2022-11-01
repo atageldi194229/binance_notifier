@@ -3,12 +3,12 @@ import sys
 from flask import Flask
 import threading
 import telebot
-import config
+import flask_bot.env_config as env_config
 
 from flask_bot.subscriptions import get_subscriptions, set_subscriptions
 from telebot import types
 
-bot = telebot.TeleBot(config.telegram_bot_api_key)
+bot = telebot.TeleBot(env_config.telegram_bot_api_key)
 
 def send_message_to_subsriptions(html_mess):
     subscriptions = get_subscriptions()
