@@ -38,10 +38,17 @@ lows = list(map(float, lows))
 
 np_closes = np.array(closes)
 macd, macdsignal, macdhist = talib.MACD(np_closes, fastperiod=12, slowperiod=26, signalperiod=9)
+apo = talib.APO(np_closes, fastperiod=8, slowperiod=21)
 
 # # check if macdhist is changing colors
 macdhist_last_a, macdhist_last_b = macdhist[-2], macdhist[-1]
-if (macdhist_last_a < 0 and macdhist_last_b < 0) or (macdhist_last_a > 0 and macdhist_last_b > 0):
+apo_last_a, apo_last_b = apo[-2], apo[-1]
+
+b1 = apo[-2] < 0 and apo[-1] >= 0
+b2 = macdhist[-2] < 0 and macdhist[-1] >= 0
+b3 = macdhist[-2] > 0 and macdhist[-1] <= 0
+
+if  not (b1 or b2 or b3):
     sys.exit()
 
 rsi = talib.RSI(np_closes, timeperiod=14)
@@ -62,6 +69,7 @@ trend_up_index = -1
 trend_down_index = -1
 bearish_divergence_index = -1
 bullish_divergence_index = -1
+is_last_bullish = -1
 
 for i in range(1, len(macdhist)):
     h_a = macdhist[i - 1]
@@ -92,6 +100,7 @@ for i in range(1, len(macdhist)):
             rsi_a_min, rsi_b_min = rsi_min_values[-2], rsi_min_values[-1]
             if a_min > b_min and rsi_a_min < rsi_b_min and rsi_a_min < 30:
                 bullish_divergence_index = i
+                is_last_bullish = True
                 print_date_time(rows[i][0], end=f'   bullish_divergence\n')
 
     
@@ -119,12 +128,27 @@ for i in range(1, len(macdhist)):
             rsi_a_max, rsi_b_max = rsi_max_values[-2], rsi_max_values[-1]
             if a_max < b_max and rsi_a_max > rsi_b_max:
                 bearish_divergence_index = i
+                is_last_bullish = False
                 print_date_time(rows[i][0], end=f'   bearish_divergence\n')
 
 
-last_signal_index = max([trend_up_index,trend_down_index,bearish_divergence_index,bullish_divergence_index])
+    apo_a, apo_b = apo[i - 1], apo[i]
+    if apo_a < 0 and apo_b >= 1 and is_last_bullish: 
+        print_date_time(rows[i][0], end=f'   bullish_divergence_then_positive_apo')
 
+last_signal_index = max([
+    trend_up_index,
+    trend_down_index,
+    bearish_divergence_index,
+    bullish_divergence_index
+])
+
+print(macdhist)
 print(result)
-if last_signal_index == len(macdhist) - 2:
+if last_signal_index == len(macdhist) - 1:
+    print(result)
+    bot.bot_send_message(result)
+
+if apo[-2] < 0 and apo[-1] >= 0 and is_last_bullish:
     print(result)
     bot.bot_send_message(result)
