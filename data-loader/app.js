@@ -121,7 +121,7 @@ const check_runs = () => {
     runs.shift()();
     running++;
 
-    console.log(running, max_run, runs.length);
+    // console.log(running, max_run, runs.length);
   }
 };
 

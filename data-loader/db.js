@@ -34,62 +34,6 @@ const convert_to_mess_list = (e) => {
   ];
 };
 
-/**
- *
- * @param {int} time in milliseconds
- * @param {int} interval in minutes
- * @returns {Boolean}
- */
-const isIntervalTime = (time, interval) => {
-  return new Date(time + 1).getMinutes() % interval === 0;
-  //   return parseInt(time / 1000 / 60) % interval === 0;
-};
-
-exports.save_message = (data, intervals = [1, 3, 5]) => {
-  //   const {
-  //     e,
-  //     s,
-  //     k: { T, x },
-  //   } = data;
-
-  if (data.e !== "kline") return;
-
-  if (data.k.x) console.log("-", data.s, data.k.T);
-  else return;
-  console.log("-", data.s);
-
-  for (let interval of intervals) {
-    if (isIntervalTime(data.k.T, interval)) {
-      console.log(data.s, data.k.x, interval);
-    }
-  }
-};
-
-// const save_5m = (mess) => {
-//   const symbol = mess.s;
-//   const interval = mess.k.i;
-//   const file_path = make_file_path(symbol, interval);
-
-//   mess = convert_to_mess_list(mess);
-
-//   let data = [];
-
-//   if (fs.existsSync(file_path)) {
-//     data = require(file_path);
-//   }
-
-//   const last = data[data.length - 1];
-//   const _a = mess[0] - last[0];
-
-//   if (_a === 5 * 60 * 1000) {
-//     data.push(mess);
-//     fs.writeFileSync(file_path, JSON.stringify(data));
-//     return;
-//   }
-
-//   exports.load_insufficient_data(symbol, interval);
-// };
-
 const combine_kline_datas = (a_list, list, interval_in_minutes = 5) => {
   let data = [...a_list];
 
@@ -129,8 +73,6 @@ exports.load_insufficient_data = (symbol, interval_in_minutes = 5) => {
   if (data.length) {
     const last = data[data.length - 1];
 
-    console.log(symbol, last[0]);
-
     const ms = new Date().getTime() - last[0];
 
     minutes = parseInt(ms / 1000 / 60) + 2;
@@ -147,7 +89,7 @@ exports.load_insufficient_data = (symbol, interval_in_minutes = 5) => {
       endTime: new Date().getTime(),
     })
     .then((list) => {
-      console.log(symbol, data.length, list.length);
+      console.log("DOWNLOADED: ", symbol, list.length);
       let new_data = combine_kline_datas(data, list, interval_in_minutes).slice(
         -max_elements
       );
