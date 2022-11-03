@@ -133,8 +133,8 @@ for i in range(1, len(macdhist)):
 
 
     apo_a, apo_b = apo[i - 1], apo[i]
-    if apo_a < 0 and apo_b >= 1 and is_last_bullish: 
-        print_date_time(rows[i][0], end=f'   bullish_divergence_then_positive_apo')
+    if ((apo[i - 2] < 0 and apo[i] >= 1) or (apo[i - 1] < 0 and apo[i] >= 1)) and is_last_bullish: 
+        print_date_time(rows[i][0], end=f'   bullish_divergence_then_positive_apo\n')
 
 last_signal_index = max([
     trend_up_index,
@@ -143,7 +143,7 @@ last_signal_index = max([
     bullish_divergence_index
 ])
 
-print(macdhist)
+# print(macdhist)
 print(result)
 if last_signal_index == len(macdhist) - 1:
     print(result)
