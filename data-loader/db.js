@@ -65,7 +65,7 @@ exports.load_insufficient_data = (symbol, interval_in_minutes = 5) => {
   let data = [];
 
   if (fs.existsSync(file_path)) {
-    data = require(file_path);
+    data = JSON.parse(fs.readFileSync(file_path).toString());
   }
 
   let minutes = max_elements * interval; // in minutes
