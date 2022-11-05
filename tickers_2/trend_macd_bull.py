@@ -70,7 +70,7 @@ trend_down_index = -1
 bearish_divergence_index = -1
 bullish_divergence_index = -1
 bullish_divergence_then_positive_apo_index = -1
-is_last_bullish = -1
+is_last_bullish = False
 
 for i in range(1, len(macdhist)):
     h_a = macdhist[i - 1]
