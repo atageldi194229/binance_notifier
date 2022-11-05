@@ -89,7 +89,13 @@ exports.load_insufficient_data = (symbol, interval_in_minutes = 5) => {
       endTime: new Date().getTime(),
     })
     .then((list) => {
-      console.log("DOWNLOADED: ", symbol, list.length);
+      console.log(
+        "DOWNLOADED: ",
+        symbol,
+        list.length,
+        (new Date().getTime() - tt.getTime()) / 1000 / 60
+      );
+
       let new_data = combine_kline_datas(data, list, interval_in_minutes).slice(
         -max_elements
       );
