@@ -69,6 +69,7 @@ trend_up_index = -1
 trend_down_index = -1
 bearish_divergence_index = -1
 bullish_divergence_index = -1
+bullish_divergence_then_positive_apo_index = -1
 is_last_bullish = -1
 
 for i in range(1, len(macdhist)):
@@ -126,7 +127,7 @@ for i in range(1, len(macdhist)):
         if len(max_values) > 1 and len(rsi_max_values) > 1:
             a_max, b_max = max_values[-2], max_values[-1]
             rsi_a_max, rsi_b_max = rsi_max_values[-2], rsi_max_values[-1]
-            if a_max < b_max and rsi_a_max > rsi_b_max:
+            if a_max < b_max and rsi_a_max > rsi_b_max and rsi_a_max > 70:
                 bearish_divergence_index = i
                 is_last_bullish = False
                 print_date_time(rows[i][0], end=f'   bearish_divergence\n')
@@ -134,21 +135,22 @@ for i in range(1, len(macdhist)):
 
     apo_a, apo_b = apo[i - 1], apo[i]
     if ((apo[i - 2] < 0 and apo[i] >= 1) or (apo[i - 1] < 0 and apo[i] >= 1)) and is_last_bullish: 
+        bullish_divergence_then_positive_apo_index = i
         print_date_time(rows[i][0], end=f'   bullish_divergence_then_positive_apo\n')
 
 last_signal_index = max([
     trend_up_index,
     trend_down_index,
     bearish_divergence_index,
-    bullish_divergence_index
+    bullish_divergence_index,
+    bullish_divergence_then_positive_apo_index
 ])
 
-# print(macdhist)
-print(result)
-if last_signal_index == len(macdhist) - 1:
-    print(result)
-    bot.bot_send_message(result)
+if last_signal_index == -1:
+    sys.exit()
 
-if apo[-2] < 0 and apo[-1] >= 0 and is_last_bullish:
+print(result)
+
+if last_signal_index == len(macdhist) - 1:
     print(result)
     bot.bot_send_message(result)
