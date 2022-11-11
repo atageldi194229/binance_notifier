@@ -166,7 +166,7 @@ for i in range(1, len(macdhist)):
     if (not isCandleAboveEMA55(ema55[i-1], opens[i-1], closes[i-1])) and isCandleAboveEMA55(ema55[i], opens[i], closes[i]) and is_last_bullish: 
         bullish_divergence_ema55_index = i
         is_last_bullish = False
-        print_date_time(rows[i][0], end=f'   bullish_divergence_above_ema55\n')
+        print_date_time(rows[i][0], end=f'   bullish_divergence_above_ema55\n{(ema55[i-1])} {ema55[i]}')
 
 last_signal_index = max([
     trend_up_index,
