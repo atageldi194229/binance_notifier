@@ -52,7 +52,7 @@ macdhist_last_a, macdhist_last_b = macdhist[-2], macdhist[-1]
 # b1 = apo[-2] < 0 and apo[-1] >= 0
 b2 = macdhist[-2] < 0 and macdhist[-1] >= 0
 b3 = macdhist[-2] > 0 and macdhist[-1] <= 0
-b4 = ema55[-1] < opens[-1] and ema55[-1] < closes[-1]
+# b4 = ema55[-1] < opens[-1] and ema55[-1] < closes[-1]
 b4 = isCandleAboveEMA55(ema55[-1], opens[-1], closes[-1])
 
 if  not (b2 or b3 or b4):
@@ -153,7 +153,7 @@ for i in range(1, len(macdhist)):
             if a_max < b_max and a_max < c_max and rsi_a_max > rsi_b_max and rsi_a_max > rsi_c_max and rsi_a_max > 70:
                 bearish_divergence_3_index = i
                 is_last_bullish = False
-                # print_date_time(rows[i][0], end=f'   bearish_divergence_1-3\n')
+                print_date_time(rows[i][0], end=f'   bearish_divergence_1-3\n')
 
 
 
@@ -165,6 +165,7 @@ for i in range(1, len(macdhist)):
 
     if (not isCandleAboveEMA55(ema55[i-1], opens[i-1], closes[i-1])) and isCandleAboveEMA55(ema55[i], opens[i], closes[i]) and is_last_bullish: 
         bullish_divergence_ema55_index = i
+        is_last_bullish = False
         print_date_time(rows[i][0], end=f'   bullish_divergence_above_ema55\n')
 
 last_signal_index = max([
