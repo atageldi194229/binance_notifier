@@ -163,7 +163,7 @@ const loadData = (symbols, interval_in_minutes) => {
           if (interval_in_minutes === 5) {
             // runRsiStrategy(symbol);
             runTrendMacdBullStrategy(symbol, interval_in_minutes);
-            runEMA4xStrategy(symbol, interval_in_minutes);
+            // runEMA4xStrategy(symbol, interval_in_minutes);
           } else if (interval_in_minutes === 15) {
             // runRsiStrategy(symbol);
           }
