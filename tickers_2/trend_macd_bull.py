@@ -29,7 +29,7 @@ def isCandleAboveEMA55(ema55, op, cl):
 with open(FILE_PATH_5M) as json_file:
     data_5m = json.load(json_file)
 
-rows = data_5m[-400:]
+rows = data_5m
 opens = np.array(rows)[:,4]
 opens = list(map(float, opens))
 closes = np.array(rows)[:,4]
