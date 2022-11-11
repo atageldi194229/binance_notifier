@@ -25,12 +25,19 @@ def print_date_time(ms, end = '\n', print_method = custom_print):
 def isCandleAboveEMA55(ema55, op, cl):
     return ema55 < op and ema55 < cl
 
+def isEMA4Down(ema233, ema55, ema21, ema8):
+    return ema233 >= ema55 and ema55 >= ema21 and ema21 >= ema8
+
+def isEMA4Up(ema233, ema55, ema21, ema8):
+    return ema233 <= ema55 and ema55 <= ema21 and ema21 <= ema8
+
+
 # read json file and calculate
 with open(FILE_PATH_5M) as json_file:
     data_5m = json.load(json_file)
 
 rows = data_5m
-opens = np.array(rows)[:,4]
+opens = np.array(rows)[:,1]
 opens = list(map(float, opens))
 closes = np.array(rows)[:,4]
 closes = list(map(float, closes))
@@ -43,7 +50,10 @@ lows = list(map(float, lows))
 np_closes = np.array(closes)
 macd, macdsignal, macdhist = talib.MACD(np_closes, fastperiod=12, slowperiod=26, signalperiod=9)
 # apo = talib.APO(np_closes, fastperiod=8, slowperiod=21)
+ema233 = talib.EMA(np_closes, timeperiod=233)
 ema55 = talib.EMA(np_closes, timeperiod=55)
+ema21 = talib.EMA(np_closes, timeperiod=21)
+ema8 = talib.EMA(np_closes, timeperiod=8)
 
 # # check if macdhist is changing colors
 macdhist_last_a, macdhist_last_b = macdhist[-2], macdhist[-1]
@@ -54,8 +64,10 @@ b2 = macdhist[-2] < 0 and macdhist[-1] >= 0
 b3 = macdhist[-2] > 0 and macdhist[-1] <= 0
 # b4 = ema55[-1] < opens[-1] and ema55[-1] < closes[-1]
 b4 = isCandleAboveEMA55(ema55[-1], opens[-1], closes[-1])
+b5 = not isEMA4Down(ema233[-2], ema55[-2], ema21[-2], ema8[-2]) and isEMA4Down(ema233[-1], ema55[-1], ema21[-1], ema8[-1])
+b6 = not isEMA4Up(ema233[-2], ema55[-2], ema21[-2], ema8[-2]) and isEMA4Up(ema233[-1], ema55[-1], ema21[-1], ema8[-1])
 
-if  not (b2 or b3 or b4):
+if  not (b2 or b3 or b4 or b5 or b6):
     sys.exit()
 
 rsi = talib.RSI(np_closes, timeperiod=14)
@@ -79,6 +91,8 @@ bullish_divergence_index = -1
 bullish_divergence_ema55_index = -1
 bullish_divergence_then_positive_apo_index = -1
 bearish_divergence_3_index = -1
+ema_4x_above_index = -1
+ema_4x_below_index = -1
 is_last_bullish = False
 
 green_to_red_indexes = []
@@ -163,10 +177,22 @@ for i in range(1, len(macdhist)):
     #     print_date_time(rows[i][0], end=f'   bullish_divergence_then_positive_apo\n')
 
 
+    # bullish divergence above
     if (not isCandleAboveEMA55(ema55[i-1], opens[i-1], closes[i-1])) and isCandleAboveEMA55(ema55[i], opens[i], closes[i]) and is_last_bullish: 
         bullish_divergence_ema55_index = i
         is_last_bullish = False
         print_date_time(rows[i][0], end=f'   bullish_divergence_above_ema55\n{(ema55[i-1])} {ema55[i]}')
+
+    
+    if not isEMA4Down(ema233[i-1], ema55[i-1], ema21[i-1], ema8[i-1]) and isEMA4Down(ema233[i], ema55[i], ema21[i], ema8[i]):
+        ema_4x_above_index = i
+        print_date_time(rows[i][0], end=f'   EMA 4x above, down\n')
+        bot.bot_send_message(result)
+
+    if not isEMA4Up(ema233[i-1], ema55[i-1], ema21[i-1], ema8[i-1]) and isEMA4Up(ema233[i], ema55[i], ema21[i], ema8[i]):
+        ema_4x_below_index = i
+        print_date_time(rows[i][0], end=f'   EMA 4x below, up\n')
+        bot.bot_send_message(result)
 
 last_signal_index = max([
     trend_up_index,
@@ -174,7 +200,9 @@ last_signal_index = max([
     bearish_divergence_index,
     # bullish_divergence_index,
     bearish_divergence_3_index,
-    bullish_divergence_ema55_index
+    bullish_divergence_ema55_index,
+    ema_4x_above_index,
+    ema_4x_below_index
 ])
 
 if last_signal_index == -1:
