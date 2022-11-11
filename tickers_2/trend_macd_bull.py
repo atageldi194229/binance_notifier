@@ -64,10 +64,10 @@ b2 = macdhist[-2] < 0 and macdhist[-1] >= 0
 b3 = macdhist[-2] > 0 and macdhist[-1] <= 0
 # b4 = ema55[-1] < opens[-1] and ema55[-1] < closes[-1]
 b4 = isCandleAboveEMA55(ema55[-1], opens[-1], closes[-1])
-b5 = not isEMA4Down(ema233[-2], ema55[-2], ema21[-2], ema8[-2]) and isEMA4Down(ema233[-1], ema55[-1], ema21[-1], ema8[-1])
-b6 = not isEMA4Up(ema233[-2], ema55[-2], ema21[-2], ema8[-2]) and isEMA4Up(ema233[-1], ema55[-1], ema21[-1], ema8[-1])
+# b5 = not isEMA4Down(ema233[-2], ema55[-2], ema21[-2], ema8[-2]) and isEMA4Down(ema233[-1], ema55[-1], ema21[-1], ema8[-1])
+# b6 = not isEMA4Up(ema233[-2], ema55[-2], ema21[-2], ema8[-2]) and isEMA4Up(ema233[-1], ema55[-1], ema21[-1], ema8[-1])
 
-if  not (b2 or b3 or b4 or b5 or b6):
+if  not (b2 or b3 or b4):
     sys.exit()
 
 rsi = talib.RSI(np_closes, timeperiod=14)
@@ -91,6 +91,7 @@ bullish_divergence_index = -1
 bullish_divergence_ema55_index = -1
 bullish_divergence_then_positive_apo_index = -1
 bearish_divergence_3_index = -1
+macd_price_bullish_index = -1
 ema_4x_above_index = -1
 ema_4x_below_index = -1
 is_last_bullish = False
@@ -131,6 +132,13 @@ for i in range(1, len(macdhist)):
                 is_last_bullish = True
                 print_date_time(rows[i][0], end=f'   bullish_divergence\n')
 
+        # macd price bullish
+        if len(min_values) > 1:
+            green_max_value = max_values[-1]
+            red_max_value = max(lows[last_green_index + 1: last_red_index + 1])
+            if green_max_value < red_max_value and min_values[-2] < min_values[-1]:
+                macd_price_bullish_index = i
+                print_date_time(rows[i][0], end=f'   macd_price_bullish\n')
     
     if h_a > 0 and h_b <= 0:
         last_green_index = i - 1
@@ -181,7 +189,7 @@ for i in range(1, len(macdhist)):
     if (not isCandleAboveEMA55(ema55[i-1], opens[i-1], closes[i-1])) and isCandleAboveEMA55(ema55[i], opens[i], closes[i]) and is_last_bullish: 
         bullish_divergence_ema55_index = i
         is_last_bullish = False
-        print_date_time(rows[i][0], end=f'   bullish_divergence_above_ema55\n{(ema55[i-1])} {ema55[i]}')
+        print_date_time(rows[i][0], end=f'   bullish_divergence_above_ema55\n')
 
     
     # if not isEMA4Down(ema233[i-1], ema55[i-1], ema21[i-1], ema8[i-1]) and isEMA4Down(ema233[i], ema55[i], ema21[i], ema8[i]):
@@ -201,8 +209,9 @@ last_signal_index = max([
     # bullish_divergence_index,
     bearish_divergence_3_index,
     bullish_divergence_ema55_index,
-    ema_4x_above_index,
-    ema_4x_below_index
+    # ema_4x_above_index,
+    # ema_4x_below_index,
+    macd_price_bullish_index
 ])
 
 if last_signal_index == -1:
