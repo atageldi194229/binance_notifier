@@ -135,7 +135,7 @@ for i in range(1, len(macdhist)):
         # macd price bullish
         if len(min_values) > 1:
             green_max_value = max_values[-1]
-            red_max_value = max(lows[last_green_index + 1: last_red_index + 1])
+            red_max_value = max(highs[last_green_index + 1: last_red_index + 1])
             if green_max_value < red_max_value and min_values[-2] < min_values[-1]:
                 macd_price_bullish_index = i
                 print_date_time(rows[i][0], end=f'   macd_price_bullish\n')
