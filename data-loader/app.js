@@ -106,6 +106,20 @@ const runTrendMacdBullStrategy = (symbol, interval_in_minutes) => {
   pyprog.stderr.on("data", (data) => console.log(data.toString()));
 };
 
+const runEMA4xStrategy = (symbol, interval_in_minutes) => {
+  const interval = interval_in_minutes + "m";
+
+  const pyprog = spawn(PYTHON_COMMAND, [
+    path.join(__dirname, "../tickers_2/ema4.py"),
+    make_file_path(symbol, interval),
+    symbol,
+    interval,
+  ]);
+
+  pyprog.stdout.on("data", (data) => console.log(data.toString()));
+  pyprog.stderr.on("data", (data) => console.log(data.toString()));
+};
+
 // const runStrategies = (symbol) => {
 //   runRsiStrategy(symbol);
 // };
@@ -149,6 +163,7 @@ const loadData = (symbols, interval_in_minutes) => {
           if (interval_in_minutes === 5) {
             // runRsiStrategy(symbol);
             runTrendMacdBullStrategy(symbol, interval_in_minutes);
+            runEMA4xStrategy(symbol, interval_in_minutes);
           } else if (interval_in_minutes === 15) {
             // runRsiStrategy(symbol);
           }
