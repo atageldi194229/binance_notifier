@@ -58,7 +58,7 @@ const combine_kline_datas = (a_list, list, interval_in_minutes = 5) => {
 };
 
 exports.load_insufficient_data = (symbol, interval_in_minutes = 5) => {
-  const max_elements = 300;
+  const max_elements = 350;
   const interval = interval_in_minutes + "m";
   const file_path = make_file_path(symbol, interval);
 
