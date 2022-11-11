@@ -70,7 +70,11 @@ trend_down_index = -1
 bearish_divergence_index = -1
 bullish_divergence_index = -1
 bullish_divergence_then_positive_apo_index = -1
+bearish_divergence_3_index = -1
 is_last_bullish = False
+
+green_to_red_indexes = []
+red_to_green_indexes = []
 
 for i in range(1, len(macdhist)):
     h_a = macdhist[i - 1]
@@ -78,6 +82,7 @@ for i in range(1, len(macdhist)):
     
     if h_a < 0 and h_b >= 0:
         last_red_index = i - 1
+        red_to_green_indexes.append(last_red_index)
         
         min_value = min(lows[last_green_index + 1: last_red_index + 1])
         min_values.append(min_value)
@@ -107,6 +112,7 @@ for i in range(1, len(macdhist)):
     
     if h_a > 0 and h_b <= 0:
         last_green_index = i - 1
+        green_to_red_indexes.append(last_green_index)
 
         max_value = max(highs[last_red_index + 1: last_green_index + 1])
         max_values.append(max_value)
@@ -132,6 +138,16 @@ for i in range(1, len(macdhist)):
                 is_last_bullish = False
                 print_date_time(rows[i][0], end=f'   bearish_divergence\n')
 
+        # bearish divergence 3
+        if len(max_values) > 2 and len(rsi_max_values) > 2:
+            a_max, b_max, c_max = max_values[-3], max_values[-2], max_values[-1]
+            rsi_a_max, rsi_b_max, rsi_c_max = rsi_max_values[-3], rsi_max_values[-2], rsi_max_values[-1]
+            if a_max < b_max and a_max < c_max and rsi_a_max > rsi_b_max and rsi_a_max > rsi_c_max and rsi_a_max > 70:
+                bearish_divergence_3_index = i
+                is_last_bullish = False
+                print_date_time(rows[i][0], end=f'   bearish_divergence_1-3\n')
+
+
 
     apo_a, apo_b = apo[i - 1], apo[i]
     if ((apo[i - 2] < 0 and apo[i] >= 1) or (apo[i - 1] < 0 and apo[i] >= 1)) and is_last_bullish: 
@@ -143,7 +159,8 @@ last_signal_index = max([
     trend_down_index,
     bearish_divergence_index,
     bullish_divergence_index,
-    bullish_divergence_then_positive_apo_index
+    bullish_divergence_then_positive_apo_index,
+    bearish_divergence_3_index
 ])
 
 if last_signal_index == -1:

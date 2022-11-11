@@ -38,11 +38,11 @@ ema21 = talib.EMA(np_closes, timeperiod=21)
 ema8 = talib.EMA(np_closes, timeperiod=8)
 
 def isEMA4Down(ema233, ema55, ema21, ema8):
-    return ema233 > ema55 and ema55 > ema21 and ema21 > ema8
+    return ema233 >= ema55 and ema55 >= ema21 and ema21 >= ema8
 
 
 def isEMA4Up(ema233, ema55, ema21, ema8):
-    return ema233 < ema55 and ema55 < ema21 and ema21 < ema8
+    return ema233 <= ema55 and ema55 <= ema21 and ema21 <= ema8
 
 
 if not isEMA4Down(ema233[-2], ema55[-2], ema21[-2], ema8[-2]) and isEMA4Down(ema233[-1], ema55[-1], ema21[-1], ema8[-1]):
