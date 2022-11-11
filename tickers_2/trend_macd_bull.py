@@ -67,7 +67,7 @@ b4 = isCandleAboveEMA55(ema55[-1], opens[-1], closes[-1])
 b5 = not isEMA4Down(ema233[-2], ema55[-2], ema21[-2], ema8[-2]) and isEMA4Down(ema233[-1], ema55[-1], ema21[-1], ema8[-1])
 # b6 = not isEMA4Up(ema233[-2], ema55[-2], ema21[-2], ema8[-2]) and isEMA4Up(ema233[-1], ema55[-1], ema21[-1], ema8[-1])
 
-if  not (b2 or b3 or b4 or b5):
+if  not (b2 or b3 or b4):
     sys.exit()
 
 rsi = talib.RSI(np_closes, timeperiod=14)
@@ -192,10 +192,10 @@ for i in range(1, len(macdhist)):
         print_date_time(rows[i][0], end=f'   bullish_divergence_above_ema55\n')
 
     
-    if not isEMA4Down(ema233[i-1], ema55[i-1], ema21[i-1], ema8[i-1]) and isEMA4Down(ema233[i], ema55[i], ema21[i], ema8[i]):
-        ema_4x_above_index = i
-        print_date_time(rows[i][0], end=f'   EMA 4x above, down\n')
-        bot.bot_send_message(result)
+    # if not isEMA4Down(ema233[i-1], ema55[i-1], ema21[i-1], ema8[i-1]) and isEMA4Down(ema233[i], ema55[i], ema21[i], ema8[i]):
+    #     ema_4x_above_index = i
+    #     print_date_time(rows[i][0], end=f'   EMA 4x above, down\n')
+    #     bot.bot_send_message(result)
 
     # if not isEMA4Up(ema233[i-1], ema55[i-1], ema21[i-1], ema8[i-1]) and isEMA4Up(ema233[i], ema55[i], ema21[i], ema8[i]):
     #     ema_4x_below_index = i
@@ -209,7 +209,7 @@ last_signal_index = max([
     # bullish_divergence_index,
     bearish_divergence_3_index,
     bullish_divergence_ema55_index,
-    ema_4x_above_index,
+    # ema_4x_above_index,
     # ema_4x_below_index,
     macd_price_bullish_index
 ])
