@@ -184,15 +184,15 @@ for i in range(1, len(macdhist)):
         print_date_time(rows[i][0], end=f'   bullish_divergence_above_ema55\n{(ema55[i-1])} {ema55[i]}')
 
     
-    if not isEMA4Down(ema233[i-1], ema55[i-1], ema21[i-1], ema8[i-1]) and isEMA4Down(ema233[i], ema55[i], ema21[i], ema8[i]):
-        ema_4x_above_index = i
-        print_date_time(rows[i][0], end=f'   EMA 4x above, down\n')
-        bot.bot_send_message(result)
+    # if not isEMA4Down(ema233[i-1], ema55[i-1], ema21[i-1], ema8[i-1]) and isEMA4Down(ema233[i], ema55[i], ema21[i], ema8[i]):
+    #     ema_4x_above_index = i
+    #     print_date_time(rows[i][0], end=f'   EMA 4x above, down\n')
+    #     bot.bot_send_message(result)
 
-    if not isEMA4Up(ema233[i-1], ema55[i-1], ema21[i-1], ema8[i-1]) and isEMA4Up(ema233[i], ema55[i], ema21[i], ema8[i]):
-        ema_4x_below_index = i
-        print_date_time(rows[i][0], end=f'   EMA 4x below, up\n')
-        bot.bot_send_message(result)
+    # if not isEMA4Up(ema233[i-1], ema55[i-1], ema21[i-1], ema8[i-1]) and isEMA4Up(ema233[i], ema55[i], ema21[i], ema8[i]):
+    #     ema_4x_below_index = i
+    #     print_date_time(rows[i][0], end=f'   EMA 4x below, up\n')
+    #     bot.bot_send_message(result)
 
 last_signal_index = max([
     trend_up_index,
