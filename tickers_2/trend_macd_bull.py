@@ -172,7 +172,7 @@ for i in range(1, len(macdhist)):
         if len(max_values) > 2 and len(rsi_max_values) > 2:
             a_max, b_max, c_max = max_values[-3], max_values[-2], max_values[-1]
             rsi_a_max, rsi_b_max, rsi_c_max = rsi_max_values[-3], rsi_max_values[-2], rsi_max_values[-1]
-            if a_max < b_max and a_max < c_max and rsi_a_max > rsi_b_max and rsi_a_max > rsi_c_max and rsi_a_max > 70:
+            if a_max < b_max and b_max < c_max and rsi_a_max > rsi_b_max and rsi_a_max > rsi_c_max and rsi_a_max > 70:
                 bearish_divergence_3_index = i
                 is_last_bullish = False
                 print_date_time(rows[i][0], end=f'   bearish_divergence_1-3\n')
