@@ -22,8 +22,8 @@ def print_date_time(ms, end = '\n', print_method = custom_print):
     s = ms / 1000.0
     print_method(datetime.datetime.fromtimestamp(s).strftime('%Y-%m-%d %H:%M:%S'), end=end)
 
-def isCandleAboveEMA55(ema55, op, cl):
-    return ema55 < op and ema55 < cl
+def isCandleAboveEMA(ema, op, cl):
+    return ema < op and ema < cl
 
 def isEMA4Down(ema233, ema55, ema21, ema8):
     return ema233 >= ema55 and ema55 >= ema21 and ema21 >= ema8
@@ -63,8 +63,8 @@ macdhist_last_a, macdhist_last_b = macdhist[-2], macdhist[-1]
 b2 = macdhist[-2] < 0 and macdhist[-1] >= 0
 b3 = macdhist[-2] > 0 and macdhist[-1] <= 0
 # b4 = ema55[-1] < opens[-1] and ema55[-1] < closes[-1]
-b4 = isCandleAboveEMA55(ema55[-1], opens[-1], closes[-1])
-b5 = not isEMA4Down(ema233[-2], ema55[-2], ema21[-2], ema8[-2]) and isEMA4Down(ema233[-1], ema55[-1], ema21[-1], ema8[-1])
+b4 = isCandleAboveEMA(ema21[-1], opens[-1], closes[-1])
+# b5 = not isEMA4Down(ema233[-2], ema55[-2], ema21[-2], ema8[-2]) and isEMA4Down(ema233[-1], ema55[-1], ema21[-1], ema8[-1])
 # b6 = not isEMA4Up(ema233[-2], ema55[-2], ema21[-2], ema8[-2]) and isEMA4Up(ema233[-1], ema55[-1], ema21[-1], ema8[-1])
 
 if  not (b2 or b3 or b4):
@@ -88,13 +88,14 @@ trend_up_index = -1
 trend_down_index = -1
 bearish_divergence_index = -1
 bullish_divergence_index = -1
-bullish_divergence_ema55_index = -1
+bullish_divergence_ema21_index = -1
 bullish_divergence_then_positive_apo_index = -1
 bearish_divergence_3_index = -1
 macd_price_bullish_index = -1
 ema_4x_above_index = -1
 ema_4x_below_index = -1
 is_last_bullish = False
+stoploss = 0
 
 green_to_red_indexes = []
 red_to_green_indexes = []
@@ -139,6 +140,7 @@ for i in range(1, len(macdhist)):
             red_max_value = max(highs[last_green_index + 1: last_red_index + 1])
             if green_max_value < red_max_value and min_values[-2] < min_values[-1]:
                 macd_price_bullish_index = i
+                is_last_bullish = False
                 stoploss = round(100 - (( min_values[-1] / closes[i] ) * 100), 2)
                 print_date_time(rows[i][0], end=f'   macd_price_bullish  {stoploss}\n')
     
@@ -190,14 +192,13 @@ for i in range(1, len(macdhist)):
 
 
     # bullish divergence above
-    if (not isCandleAboveEMA55(ema55[i-1], opens[i-1], closes[i-1])) and isCandleAboveEMA55(ema55[i], opens[i], closes[i]) and is_last_bullish: 
-        bullish_divergence_ema55_index = i
+    if (not isCandleAboveEMA(ema21[i-1], opens[i-1], closes[i-1])) and isCandleAboveEMA(ema21[i], opens[i], closes[i]) and is_last_bullish: 
+        bullish_divergence_ema21_index = i
         is_last_bullish = False
-        # stoploss = round(100 - (( closes[i] / b_max ) * 100), 2)
-        print_date_time(rows[i][0], end=f'   bullish_divergence_above_ema55\n')
+        print_date_time(rows[i][0], end=f'   bullish_divergence_above_ema21  {stoploss}\n')
 
     
-    # if not isEMA4Down(ema233[i-1], ema55[i-1], ema21[i-1], ema8[i-1]) and isEMA4Down(ema233[i], ema55[i], ema21[i], ema8[i]):
+    # if not isEMA4Down(ema233[i-1], ema21[i-1], ema21[i-1], ema8[i-1]) and isEMA4Down(ema233[i], ema55[i], ema21[i], ema8[i]):
     #     ema_4x_above_index = i
     #     print_date_time(rows[i][0], end=f'   EMA 4x above, down\n')
     #     bot.bot_send_message(result)
@@ -211,9 +212,9 @@ last_signal_index = max([
     # trend_up_index,
     # trend_down_index,
     bearish_divergence_index,
-    bullish_divergence_index,
+    # bullish_divergence_index,
     bearish_divergence_3_index,
-    bullish_divergence_ema55_index,
+    bullish_divergence_ema21_index,
     # ema_4x_above_index,
     # ema_4x_below_index,
     macd_price_bullish_index
