@@ -134,15 +134,15 @@ for i in range(1, len(macdhist)):
                 stoploss = round(100 - (( b_min / closes[i] ) * 100), 2)
                 print_date_time(rows[i][0], end=f'   bullish_divergence  {stoploss} \n')
 
-        # macd price bullish
-        if len(min_values) > 1:
-            green_max_value = max_values[-1]
-            red_max_value = max(highs[last_green_index + 1: last_red_index + 1])
-            if green_max_value < red_max_value and min_values[-2] < min_values[-1]:
-                macd_price_bullish_index = i
-                is_last_bullish = False
-                stoploss = round(100 - (( min_values[-1] / closes[i] ) * 100), 2)
-                print_date_time(rows[i][0], end=f'   macd_price_bullish  {stoploss}\n')
+        # # macd price bullish
+        # if len(min_values) > 1:
+        #     green_max_value = max_values[-1]
+        #     red_max_value = max(highs[last_green_index + 1: last_red_index + 1])
+        #     if green_max_value < red_max_value and min_values[-2] < min_values[-1]:
+        #         macd_price_bullish_index = i
+        #         is_last_bullish = False
+        #         stoploss = round(100 - (( min_values[-1] / closes[i] ) * 100), 2)
+        #         print_date_time(rows[i][0], end=f'   macd_price_bullish  {stoploss}\n')
     
     if h_a > 0 and h_b <= 0:
         last_green_index = i - 1
@@ -217,7 +217,7 @@ last_signal_index = max([
     bullish_divergence_ema21_index,
     # ema_4x_above_index,
     # ema_4x_below_index,
-    macd_price_bullish_index
+    # macd_price_bullish_index
 ])
 
 if last_signal_index == -1:
