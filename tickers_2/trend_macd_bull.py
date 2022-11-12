@@ -130,7 +130,8 @@ for i in range(1, len(macdhist)):
             if a_min > b_min and rsi_a_min < rsi_b_min and rsi_a_min < 30:
                 bullish_divergence_index = i
                 is_last_bullish = True
-                print_date_time(rows[i][0], end=f'   bullish_divergence\n')
+                stoploss = 100 - (( b_min / closes[i] ) * 100)
+                print_date_time(rows[i][0], end=f'   bullish_divergence  {stoploss} \n')
 
         # macd price bullish
         if len(min_values) > 1:
@@ -138,7 +139,8 @@ for i in range(1, len(macdhist)):
             red_max_value = max(highs[last_green_index + 1: last_red_index + 1])
             if green_max_value < red_max_value and min_values[-2] < min_values[-1]:
                 macd_price_bullish_index = i
-                print_date_time(rows[i][0], end=f'   macd_price_bullish\n')
+                stoploss = 100 - (( min_values[-1] / closes[i] ) * 100)
+                print_date_time(rows[i][0], end=f'   macd_price_bullish  {stoploss}\n')
     
     if h_a > 0 and h_b <= 0:
         last_green_index = i - 1
@@ -166,7 +168,8 @@ for i in range(1, len(macdhist)):
             if a_max < b_max and rsi_a_max > rsi_b_max and rsi_a_max > 70:
                 bearish_divergence_index = i
                 is_last_bullish = False
-                print_date_time(rows[i][0], end=f'   bearish_divergence\n')
+                stoploss = 100 - (( closes[i] / b_max ) * 100)
+                print_date_time(rows[i][0], end=f'   bearish_divergence  {stoploss}\n')
 
         # bearish divergence 3
         if len(max_values) > 2 and len(rsi_max_values) > 2:
@@ -175,7 +178,8 @@ for i in range(1, len(macdhist)):
             if a_max < b_max and b_max < c_max and rsi_a_max > rsi_b_max and rsi_a_max > rsi_c_max and rsi_a_max > 70:
                 bearish_divergence_3_index = i
                 is_last_bullish = False
-                print_date_time(rows[i][0], end=f'   bearish_divergence_1-3\n')
+                stoploss = 100 - (( closes[i] / c_max ) * 100)
+                print_date_time(rows[i][0], end=f'   bearish_divergence_1-3  {stoploss}\n')
 
 
 
@@ -203,8 +207,8 @@ for i in range(1, len(macdhist)):
     #     bot.bot_send_message(result)
 
 last_signal_index = max([
-    trend_up_index,
-    trend_down_index,
+    # trend_up_index,
+    # trend_down_index,
     bearish_divergence_index,
     # bullish_divergence_index,
     bearish_divergence_3_index,
