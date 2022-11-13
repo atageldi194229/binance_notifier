@@ -14,7 +14,8 @@ const parseMessage = (mess) => {
   for (let i = 1; i < arr.length; i++) {
     let [date, time, strategy, stoploss] = arr[i]
       .split(" ")
-      .map((e) => e.trim());
+      .map((e) => e.trim())
+      .filter((e) => e);
     strategies.push({
       name: strategy,
       datetime: date + " " + time,
