@@ -2,7 +2,10 @@ const expressAsyncHandler = require("express-async-handler");
 const { addToDB } = require("../../utils/db");
 
 const parseMessage = (mess) => {
-  const arr = mess.split("\n").map((e) => e.trim());
+  const arr = mess
+    .split("\n")
+    .map((e) => e.trim())
+    .filter((e) => e);
 
   const [symbol, interval] = arr[0].split("_").map((e) => e.trim());
 
