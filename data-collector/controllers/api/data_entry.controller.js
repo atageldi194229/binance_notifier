@@ -1,6 +1,5 @@
 const expressAsyncHandler = require("express-async-handler");
-const fs = require("fs");
-const path = require("path");
+const { addToDB } = require("../../utils/db");
 
 const parseMessage = (mess) => {
   const arr = mess.split("\n").map((e) => e.trim());
@@ -15,8 +14,7 @@ const parseMessage = (mess) => {
       .map((e) => e.trim());
     strategies.push({
       name: strategy,
-      date,
-      time,
+      datetime: date + " " + time,
       stoploss: Number(stoploss),
     });
   }
@@ -26,6 +24,6 @@ const parseMessage = (mess) => {
 
 exports.create = expressAsyncHandler(async (req, res) => {
   const { message } = req.params;
-
+  addToDB(parseMessage(message));
   res.sendStatus(200);
 });

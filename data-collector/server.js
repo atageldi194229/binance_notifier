@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const fileUpload = require("express-fileupload");
 const { errorHandler } = require("./middleware/error.middleware");
 
 // Load env vars
