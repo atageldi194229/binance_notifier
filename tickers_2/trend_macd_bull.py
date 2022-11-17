@@ -96,7 +96,9 @@ bearish_divergence_below_rsi45 = -1
 macd_price_bullish_index = -1
 ema_4x_above_index = -1
 ema_4x_below_index = -1
+bullish_divergence_canceled_ll_index = -1
 is_last_bullish = False
+is_last_bullish_for_cancel = False
 stoploss = 0
 
 is_last_bearish_divergence = False
@@ -135,6 +137,7 @@ for i in range(1, len(macdhist)):
             if a_min > b_min and rsi_a_min < rsi_b_min and rsi_a_min < 30:
                 bullish_divergence_index = i
                 is_last_bullish = True
+                is_last_bullish_for_cancel = True
                 is_last_bearish_divergence = False
                 stoploss = round(100 - (( b_min / closes[i] ) * 100), 2)
                 print_date_time(rows[i][0], end=f'   bullish_divergence  {stoploss} \n')
@@ -175,6 +178,7 @@ for i in range(1, len(macdhist)):
             if a_max < b_max and rsi_a_max > rsi_b_max and rsi_a_max > 70:
                 bearish_divergence_index = i
                 is_last_bullish = False
+                is_last_bullish_for_cancel = False
                 is_last_bearish_divergence = True
                 stoploss = round(100 - (( closes[i] / b_max ) * 100), 2)
                 print_date_time(rows[i][0], end=f'   bearish_divergence  {stoploss}\n')
@@ -186,6 +190,7 @@ for i in range(1, len(macdhist)):
             if a_max < b_max and b_max < c_max and rsi_a_max > rsi_b_max and rsi_a_max > rsi_c_max and rsi_a_max > 70:
                 bearish_divergence_3_index = i
                 is_last_bullish = False
+                is_last_bullish_for_cancel = False
                 is_last_bearish_divergence = True
                 stoploss = round(100 - (( closes[i] / c_max ) * 100), 2)
                 print_date_time(rows[i][0], end=f'   bearish_divergence_1-3  {stoploss}\n')
@@ -204,11 +209,16 @@ for i in range(1, len(macdhist)):
         is_last_bullish = False
         print_date_time(rows[i][0], end=f'   bullish_divergence_above_ema21  {stoploss}\n')
 
+    if is_last_bullish_for_cancel and min_values[-1] > lows[i]:
+        bullish_divergence_canceled_ll_index = i
+        is_last_bullish_for_cancel = False
+        print_date_time(rows[i][0], end=f'   bullish_divergence_canceled_ll  {stoploss}\n')
     
     if is_last_bearish_divergence and closes[i] < ema21[i]:
         is_last_bearish_divergence = False
         bearish_divergence_below_ema21 = i
         print_date_time(rows[i][0], end=f'   bearish_divergence_below_ema21  {stoploss}\n')
+
     if is_last_bearish_divergence and rsi[i] <= 45:
         is_last_bearish_divergence = False
         bearish_divergence_below_rsi45 = i
@@ -234,6 +244,7 @@ last_signal_index = max([
     bullish_divergence_ema21_index,
     bearish_divergence_below_ema21,
     bearish_divergence_below_rsi45,
+    bullish_divergence_canceled_ll_index,
     # ema_4x_above_index,
     # ema_4x_below_index,
     # macd_price_bullish_index
