@@ -92,7 +92,7 @@ bullish_divergence_ema21_index = -1
 bullish_divergence_then_positive_apo_index = -1
 bearish_divergence_3_index = -1
 bearish_divergence_below_ema21 = -1
-bearish_divergence_below_rsi45 = -1
+bearish_divergence_below_rsi40 = -1
 macd_price_bullish_index = -1
 ema_4x_above_index = -1
 ema_4x_below_index = -1
@@ -213,22 +213,25 @@ for i in range(1, len(macdhist)):
     if (not isCandleAboveEMA(ema21[i-1], opens[i-1], closes[i-1])) and isCandleAboveEMA(ema21[i], opens[i], closes[i]) and is_last_bullish: 
         bullish_divergence_ema21_index = i
         is_last_bullish = False
+        stoploss = round(100 - (( min_values[-1] / closes[i] ) * 100), 2)
         print_date_time(rows[i][0], end=f'   bullish_divergence_above_ema21  {stoploss}\n')
 
     if last_bullish_for_cancel == 2 and min_values[-1] > lows[i]:
         bullish_divergence_canceled_ll_index = i
         last_bullish_for_cancel = 0
-        print_date_time(rows[i][0], end=f'   bullish_divergence_canceled_ll  {stoploss}\n')
+        print_date_time(rows[i][0], end=f'   bullish_divergence_canceled_ll  0\n')
     
     if is_last_bearish_divergence == 1 and closes[i] < ema21[i]:
         is_last_bearish_divergence = 2
         bearish_divergence_below_ema21 = i
+        stoploss = round(100 - (( closes[i] / max_values[-1] ) * 100), 2)
         print_date_time(rows[i][0], end=f'   bearish_divergence_below_ema21  {stoploss}\n')
 
-    if is_last_bearish_divergence == 2 and rsi[i] <= 45:
+    if is_last_bearish_divergence == 2 and rsi[i] <= 40:
         is_last_bearish_divergence = 0
-        bearish_divergence_below_rsi45 = i
-        print_date_time(rows[i][0], end=f'   bearish_divergence_below_rsi45  {stoploss}\n')
+        bearish_divergence_below_rsi40 = i
+        stoploss = round(100 - (( closes[i] / max_values[-1] ) * 100), 2)
+        print_date_time(rows[i][0], end=f'   bearish_divergence_below_rsi40  {stoploss}\n')
     
     
     # if not isEMA4Down(ema233[i-1], ema21[i-1], ema21[i-1], ema8[i-1]) and isEMA4Down(ema233[i], ema55[i], ema21[i], ema8[i]):
@@ -249,7 +252,7 @@ last_signal_index = max([
     bearish_divergence_3_index,
     bullish_divergence_ema21_index,
     bearish_divergence_below_ema21,
-    bearish_divergence_below_rsi45,
+    bearish_divergence_below_rsi40,
     bullish_divergence_canceled_ll_index,
     # ema_4x_above_index,
     # ema_4x_below_index,
