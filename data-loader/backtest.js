@@ -3,6 +3,15 @@ const path = require("path");
 const { USDMClient } = require("binance");
 require("dotenv").config();
 
+const optionDefinitions = [
+  { name: "input_file", alias: "i", type: String },
+  { name: "strategy", alias: "s", type: String },
+  { name: "stoploss", type: Number },
+  { name: "takeprofit", type: Number },
+];
+const commandLineArgs = require("command-line-args");
+const options = commandLineArgs(optionDefinitions);
+
 const client = new USDMClient({
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
@@ -18,7 +27,7 @@ const client = new USDMClient({
     }
 }
 */
-const input_file = process.argv[2];
+const input_file = options.input_file;
 const input_data = JSON.parse(fs.readFileSync(input_file));
 const metadata = {};
 
@@ -53,8 +62,8 @@ const metadata = {};
 //   }
 // }
 
-// const stoploss = 0.5;
-const takeprofit = 1.95;
+const _stoploss = options.takeprofit;
+const takeprofit = options.takeprofit || 1.95;
 
 let wins = 0;
 let win_p = 0;
@@ -63,13 +72,17 @@ let loss_p = 0;
 
 (async () => {
   for (let mess of input_data) {
-    const {
+    let {
       symbol,
       interval,
       str: { name, unixtime, stoploss },
     } = mess;
 
-    if (name !== "bearish_divergence_1-3" && stoploss > 2) {
+    stoploss = _stoploss || stoploss;
+    if (stoploss) continue;
+
+    //  "bearish_divergence_1-3"
+    if (name !== options.strategy) {
       continue;
     }
 
@@ -121,3 +134,5 @@ let loss_p = 0;
       });
   }
 })();
+
+// node backtest -i "/home/dell/projects/node/backtest/output.json" -s "bearish_divergence_1-3" --takeprofit 1.95
