@@ -25,7 +25,7 @@ def create_order(strategy, takeprofit, stoploss, entry_price, entry_time):
     orders.append([strategy, takeprofit, stoploss, entry_price, entry_time]);
 
 def close_order(order, close_price, close_time, win):
-    [strategy, takeprofit, stoploss, entry_price, entry_time] = strategy
+    [strategy, takeprofit, stoploss, entry_price, entry_time] = order
     closed_orders.append([strategy, takeprofit, stoploss, entry_price, entry_time, close_price, close_time, win])
 
 def custom_print(text, end='\n'):
