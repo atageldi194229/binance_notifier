@@ -1,11 +1,12 @@
 require("dotenv").config();
 const { TaskManager } = require("./task_manager");
-const path = require("path");
 const fs = require("fs");
+const path = require("path");
+const { spawn } = require("child_process");
 
 const run_backtest = (file, symbol, interval) => {
   return new Promise((resolve, reject) => {
-    const pyprog = spawn(PYTHON_COMMAND, [
+    const pyprog = spawn(process.env.PYTHON_COMMAND, [
       path.join(__dirname, "../tickers_2/bactest.py"),
       file,
       symbol,
