@@ -5,8 +5,6 @@ const fs = require("fs");
 
 const run_backtest = (file, symbol, interval) => {
   return new Promise((resolve, reject) => {
-    const interval = interval_in_minutes + "m";
-
     const pyprog = spawn(PYTHON_COMMAND, [
       path.join(__dirname, "../tickers_2/bactest.py"),
       file,
