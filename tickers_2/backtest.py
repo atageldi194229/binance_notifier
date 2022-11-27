@@ -14,7 +14,8 @@ DIR = sys.argv[4]
 
 result = f'{TRADE_SYMBOL}_{TRADE_INTERVAL}\n'
 
-takeprofit = 1.95
+takeprofit = 4
+
 # [[strategy, takeprofit, stoploss, entry_price, entry_time, close_price, close_time, win]]
 
 orders = [];
@@ -28,6 +29,8 @@ def close_order(order, close_price, close_time, win, win_percentage):
     [strategy, takeprofit, stoploss, entry_price, entry_time] = order
     # closed_orders.append([strategy, takeprofit, stoploss, entry_price, entry_time, close_price, close_time, win, win_percentage])
     closed_orders.append({
+        "trade_symbol": TRADE_SYMBOL, 
+        "trade_interval": TRADE_INTERVAL,
         "strategy": strategy, 
         "takeprofit": takeprofit, 
         "stoploss": stoploss, 
