@@ -67,10 +67,28 @@ exports.jsonFilesToOneExcelFile = (json_files, xlsx_file) => {
   workbook.write(xlsx_file);
 };
 
+// let dir = path.join(__dirname, "backtest");
+// let files = fs
+//   .readdirSync(dir)
+//   .filter((e) => e.endsWith(".json"))
+//   .map((e) => path.join(dir, e));
+
+// exports.jsonFilesToOneExcelFile(files, path.join(dir, "backtest_result.xlsx"));
+
+exports.jsonFilesToOneJsonFile = (json_files, json_file) => {
+  let data = [];
+
+  for (let file of json_files) {
+    data = [...data, ...JSON.parse(fs.readFileSync(file))];
+  }
+
+  fs.writeFileSync(json_file, JSON.stringify(data));
+};
+
 let dir = path.join(__dirname, "backtest");
 let files = fs
   .readdirSync(dir)
   .filter((e) => e.endsWith(".json"))
   .map((e) => path.join(dir, e));
 
-exports.jsonFilesToOneExcelFile(files, path.join(dir, "backtest_result.xlsx"));
+exports.jsonFilesToOneJsonFile(files, "~/backtest.json");
