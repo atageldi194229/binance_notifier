@@ -4,10 +4,12 @@ const fs = require("fs");
 const path = require("path");
 const { spawn } = require("child_process");
 
+const PYTHON_COMMAND = process.env.PYTHON_COMMAND || "python3";
+
 const run_backtest = (file, symbol, interval) => {
   return new Promise((resolve, reject) => {
-    const pyprog = spawn(process.env.PYTHON_COMMAND, [
-      path.join(__dirname, "../tickers_2/bactest.py"),
+    const pyprog = spawn(PYTHON_COMMAND, [
+      path.join(__dirname, "../tickers_2/backtest.py"),
       file,
       symbol,
       interval,
@@ -35,5 +37,6 @@ const files = fs
 for (let file of files) {
   let [symbol, interval] = file.slice(0, -5);
   file = path.join(__dirname, "history", file);
+  console.log(file);
   taskManager.addTask(() => run_backtest(file, symbol, interval));
 }
