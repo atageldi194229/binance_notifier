@@ -24,8 +24,8 @@ exports.jsonToXlsx = (json_file, xlsx_file) => {
   for (let i = 0; i < data.length; i++) {
     for (let j = 0; j < keys.length; j++) {
       let value = data[i][keys[j]];
-      if (typeof myVar === "string") {
-        worksheet.cell(i + 2, j + 1).string(value);
+      if (typeof value === "string") {
+        worksheet.cell(i + 2, j + 1).string(value.toString());
       } else {
         worksheet.cell(i + 2, j + 1).number(value);
       }
