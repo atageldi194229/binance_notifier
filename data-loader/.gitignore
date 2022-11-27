@@ -2,4 +2,6 @@ node_modules
 .env
 db/*.json
 history/*.json
+backtest/*.json
+backtest/*.xlsx
 ecosystem.config.js

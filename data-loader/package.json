@@ -12,6 +12,7 @@
   "dependencies": {
     "binance": "^2.1.2",
     "command-line-args": "^5.2.1",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "excel4node": "^1.8.0"
   }
 }
