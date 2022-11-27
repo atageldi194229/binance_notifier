@@ -91,4 +91,4 @@ let files = fs
   .filter((e) => e.endsWith(".json"))
   .map((e) => path.join(dir, e));
 
-exports.jsonFilesToOneJsonFile(files, path.join(dir, "~/backtest.xlsxjson"));
+exports.jsonFilesToOneJsonFile(files, path.join(dir, "backtest.xlsxjson"));
