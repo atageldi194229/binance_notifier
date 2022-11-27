@@ -10,6 +10,7 @@ import datetime
 FILE_PATH_5M = sys.argv[1] # 5 minute interval kline's file path
 TRADE_SYMBOL = sys.argv[2]
 TRADE_INTERVAL = sys.argv[3]
+DIR = sys.argv[4]
 
 result = f'{TRADE_SYMBOL}_{TRADE_INTERVAL}\n'
 
@@ -290,6 +291,6 @@ for i in range(1, len(macdhist)):
                 temp_orders.append(order)
     orders = temp_orders    
             
-log_file_name = f"{TRADE_SYMBOL}_{TRADE_INTERVAL}_orders.json"
+log_file_name = f"{DIR}/{TRADE_SYMBOL}_{TRADE_INTERVAL}_orders.json"
 with open(log_file_name, "w") as outfile:
     json.dump(closed_orders, outfile)
