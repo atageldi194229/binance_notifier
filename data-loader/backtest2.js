@@ -35,7 +35,7 @@ const files = fs
   .filter((e) => e.endsWith(".json"));
 
 for (let file of files) {
-  let [symbol, interval] = file.slice(0, -5);
+  let [symbol, interval] = file.slice(0, -5).split("_");
   file = path.join(__dirname, "history", file);
   console.log(file);
   taskManager.addTask(() => run_backtest(file, symbol, interval));
