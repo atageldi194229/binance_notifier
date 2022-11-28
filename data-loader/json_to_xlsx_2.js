@@ -18,6 +18,8 @@ exports.jsonFilesToOneExcelFile = (json_files, xlsx_file) => {
   const xls = json2xls(data);
 
   fs.writeFileSync(xlsx_file, xls, "binary");
+
+  console.log("WORK DONE MY FRIEND");
 };
 
 let dir = path.join(__dirname, "backtest");
