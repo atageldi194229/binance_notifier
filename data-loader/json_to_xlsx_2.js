@@ -12,12 +12,6 @@ exports.jsonFilesToOneExcelFile = (json_files, xlsx_file) => {
     data = [...data, ...JSON.parse(fs.readFileSync(file))];
   }
 
-  data = data.map((e) => ({
-    ...e,
-    entry_time: new Date(e.entry_time),
-    close_time: new Date(e.close_time),
-  }));
-
   const xls = json2xls(data);
 
   fs.writeFileSync(xlsx_file, xls, "binary");
@@ -31,12 +25,6 @@ exports.jsonFilesToExcelFiles = (json_files, dir) => {
   for (let file of json_files) {
     console.log(file);
     let data = JSON.parse(fs.readFileSync(file));
-
-    data = data.map((e) => ({
-      ...e,
-      entry_time: new Date(e.entry_time),
-      close_time: new Date(e.close_time),
-    }));
 
     const xls = json2xls(data);
 
