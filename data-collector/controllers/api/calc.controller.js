@@ -37,6 +37,9 @@ exports.getData = expressAsyncHandler(async (req, res) => {
         result[key].loss_percentage += e.win_percentage;
       }
     }
+
+    result[key].profit =
+      result[key].win_percentage + result[key].loss_percentage;
   }
 
   res.status(200).json(result);
