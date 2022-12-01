@@ -13,15 +13,18 @@ const getUsdtSymbols = async () => {
   return symbols.map((e) => e.symbol).filter((e) => e.endsWith("USDT"));
 };
 
-const taskManager = new TaskManager(2, () => {
+const taskManager = new TaskManager(3, () => {
   console.log("Task manager is empty, all tasks are done");
   process.exit();
 });
 
-getUsdtSymbols().then((symbols) => {
-  console.log(symbols);
-  for (let symbol of symbols) {
-    taskManager.addTask(() => load_symbol_history(symbol, "5m"));
-    taskManager.addTask(() => load_symbol_history(symbol, "15m"));
-  }
-});
+getUsdtSymbols()
+  .then((symbols) => {
+    console.log(symbols);
+    for (let symbol of symbols) {
+      taskManager.addTask(() => load_symbol_history(symbol, "5m"));
+      taskManager.addTask(() => load_symbol_history(symbol, "15m"));
+      taskManager.addTask(() => load_symbol_history(symbol, "1h"));
+    }
+  })
+  .catch(console.error);
