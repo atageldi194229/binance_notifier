@@ -88,8 +88,8 @@ class TradeBot {
   bot.closeAll();
 
   for (let e of bot.all) {
-    e.setDataValue("entry_time", new Date(e.entry_time).getTime());
-    e.setDataValue("close_time", new Date(e.close_time).getTime());
+    e.entry_time = new Date(e.entry_time).getTime();
+    e.close_time = new Date(e.close_time).getTime();
   }
 
   fs.writeFileSync(process.argv[2], JSON.stringify(bot.all));
