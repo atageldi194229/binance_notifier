@@ -35,7 +35,7 @@ class TradeBot {
       );
 
       this.positions = this.positions.filter((e) => e !== found);
-      this.all.push(found);
+      this.all.push(found[1]);
 
       //   this.cach +=
       //     found[0] * this.max_position_count * found[1].win_percentage + found[0];
