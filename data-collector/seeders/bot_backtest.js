@@ -74,11 +74,11 @@ class TradeBot {
     order: [["entry_time", "asc"]],
     where: {
       [Op.and]: [
-        // {
-        //   entry_time: {
-        //     [Op.between]: ["2021/10/01", "2021/10/10"],
-        //   },
-        // },
+        {
+          entry_time: {
+            [Op.between]: ["2020/01/01", "2021/01/01"],
+          },
+        },
         {
           //   takeprofit: 2,
           stoploss: {
