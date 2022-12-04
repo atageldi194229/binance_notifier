@@ -89,7 +89,7 @@ class TradeBot {
         {
           //   strategy: "bearish_divergence",
           //   strategy: "bearish_divergence_1-3",
-          //   strategy: "bullish_divergence",
+          strategy: "bullish_divergence",
           //   takeprofit: 2,
           trade_interval: "15m",
           stoploss: {
