@@ -87,6 +87,11 @@ class TradeBot {
 
   bot.closeAll();
 
+  for (let e of bot.all) {
+    e.setDataValue("entry_time", e.entry_time.getTime());
+    e.setDataValue("close_time", e.close_time.getTime());
+  }
+
   fs.writeFileSync(process.argv[2], JSON.stringify(bot.all));
 
   console.log("Percentage: ", bot.percentage);
