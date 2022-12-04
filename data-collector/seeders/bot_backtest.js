@@ -50,6 +50,7 @@ class TradeBot {
         d.setMinutes(0);
         d.setSeconds(0);
 
+        this.today_percentage[0] = 0;
         this.today_percentage[1] = d.getTime();
       }
 
