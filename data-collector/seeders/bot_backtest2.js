@@ -88,6 +88,6 @@ class TradeBot {
   bot.closeAll();
 
   console.log("Percentage: ", bot.percentage);
-  console.log("Opened pos: ", bot.all.count);
+  console.log("Opened pos: ", bot.all.length);
   process.exit();
 })();
