@@ -89,7 +89,7 @@ class TradeBot {
           //   takeprofit: 2,
           trade_interval: "15m",
           stoploss: {
-            [Op.between]: [1, 10],
+            [Op.between]: [1, 2],
           },
         },
       ],
