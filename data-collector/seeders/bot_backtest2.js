@@ -71,21 +71,7 @@ class TradeBot {
   let bot = new TradeBot();
 
   const positions = await Position.findAll({
-    where: {
-      [Op.and]: [
-        // {
-        //   entry_time: {
-        //     [Op.between]: ["2021/10/01", "2021/10/10"],
-        //   },
-        // },
-        {
-          //   takeprofit: 2,
-          stoploss: {
-            [Op.between]: [1, 10],
-          },
-        },
-      ],
-    },
+    where: {},
   });
 
   console.log("Positions: ", positions.length);
