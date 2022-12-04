@@ -76,7 +76,6 @@ class TradeBot {
   let bot = new TradeBot();
 
   const positions = await Position.findAll({
-    order: [["entry_time", "asc"]],
     // where: {},
   });
 
@@ -88,7 +87,16 @@ class TradeBot {
 
   bot.closeAll();
 
+  let rows = JSON.parse(JSON.stringify(bot.all));
+
+  for (let e of rows) {
+    e.entry_time = new Date(e.entry_time).getTime();
+    e.close_time = new Date(e.close_time).getTime();
+  }
+
+  fs.writeFileSync(process.argv[2], JSON.stringify(rows));
+
   console.log("Percentage: ", bot.percentage);
-  console.log("Opened pos: ", bot.all.length);
+  console.log("Opened pos: ", rows.count);
   process.exit();
 })();
