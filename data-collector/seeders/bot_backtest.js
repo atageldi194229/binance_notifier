@@ -71,6 +71,7 @@ class TradeBot {
   let bot = new TradeBot();
 
   const positions = await Position.findAll({
+    order: [["entry_time", "asc"]],
     where: {
       [Op.and]: [
         // {
