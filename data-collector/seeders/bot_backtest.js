@@ -19,7 +19,8 @@ class TradeBot {
   addPosition(position) {
     if (position.entry_time.getTime() <= this.today_percentage[1]) return;
 
-    let available_position_count = this.max_position_count - this.positions;
+    let available_position_count =
+      this.max_position_count - this.positions.length;
     if (available_position_count > 0) {
       let amount = this.cash / available_position_count;
       this.positions.push([amount, position]);
@@ -54,7 +55,8 @@ class TradeBot {
 
       if (position.entry_time.getTime() <= this.today_percentage[1]) return;
 
-      available_position_count = this.max_position_count - this.positions;
+      available_position_count =
+        this.max_position_count - this.positions.length;
       let amount = this.cash / available_position_count;
       this.positions.push([amount, position]);
     }
