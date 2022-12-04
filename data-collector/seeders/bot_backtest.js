@@ -79,13 +79,13 @@ class TradeBot {
     order: [["entry_time", "asc"]],
     where: {
       [Op.and]: [
+        // {
+        //   entry_time: {
+        //     [Op.between]: [new Date(2020, 0), new Date(2021, 0)],
+        //   },
+        // },
         {
-          entry_time: {
-            [Op.between]: [new Date(2020, 0), new Date(2021, 0)],
-          },
-        },
-        {
-          strategy: "bullish_divergence",
+          //   strategy: "bullish_divergence",
           //   takeprofit: 2,
           stoploss: {
             [Op.between]: [1, 10],
