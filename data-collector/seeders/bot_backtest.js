@@ -38,8 +38,8 @@ class TradeBot {
       this.positions = this.positions.filter((e) => e !== found);
       this.all.push(found[1]);
 
-      //   this.cach +=
-      //     found[0] * this.max_position_count * found[1].win_percentage + found[0];
+      this.cach +=
+        found[0] * this.max_position_count * found[1].win_percentage + found[0];
       this.percentage += found[1].win_percentage;
       this.today_percentage[0] += found[1].win_percentage;
 
@@ -64,8 +64,8 @@ class TradeBot {
 
   closeAll() {
     for (let [amount, position] of this.positions) {
-      //   this.cach +=
-      //     amount * this.max_position_count * position.win_percentage + amount;
+      this.cach +=
+        amount * this.max_position_count * position.win_percentage + amount;
       this.all.push(position);
       this.percentage += position.win_percentage;
     }
@@ -116,6 +116,7 @@ class TradeBot {
   fs.writeFileSync(process.argv[2], JSON.stringify(rows));
 
   console.log("Percentage: ", bot.percentage);
+  console.log("Cash: ", bot.cash);
   console.log("Opened pos: ", rows.length);
   process.exit();
 })();
