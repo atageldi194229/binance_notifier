@@ -87,7 +87,7 @@ class TradeBot {
         //   },
         // },
         {
-          //   strategy: "bullish_divergence",
+          strategy: "bullish_divergence",
           //   takeprofit: 2,
           trade_interval: "15m",
           stoploss: {
