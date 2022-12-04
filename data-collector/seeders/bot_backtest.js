@@ -76,7 +76,7 @@ class TradeBot {
       [Op.and]: [
         {
           entry_time: {
-            [Op.between]: ["2020/01/01", "2021/01/01"],
+            [Op.between]: [new Date(2020, 0), new Date(2021, 0)],
           },
         },
         {
