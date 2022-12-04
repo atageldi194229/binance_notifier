@@ -4,6 +4,8 @@ const {
   Sequelize: { Op },
 } = require("../models");
 
+const fs = require("fs");
+
 class TradeBot {
   constructor(cash = 10000, max_position_count = 10) {
     this.cash = cash;
