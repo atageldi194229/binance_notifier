@@ -71,7 +71,7 @@ class TradeBot {
   let bot = new TradeBot();
 
   const positions = await Position.findAll({
-    where: {},
+    // where: {},
   });
 
   console.log("Positions: ", positions.length);
