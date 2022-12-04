@@ -29,7 +29,7 @@ class TradeBot {
         ...this.positions.map(([, e]) => e.close_time.getTime())
       );
 
-      if (position.close_time.getTime() < min_close_time) return;
+      if (position.entry_time.getTime() < min_close_time) return;
 
       let found = this.positions.find(
         ([, e]) => e.close_time.getTime() === min_close_time
