@@ -35,7 +35,6 @@ class TradeBot {
         ([, e]) => e.close_time.getTime() === min_close_time
       );
 
-      this.positions = this.positions.filter((e) => e !== found);
       this.positions.splice(this.positions.indexOf(found), 1);
       this.all.push(found[1]);
 
