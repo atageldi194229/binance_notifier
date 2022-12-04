@@ -36,6 +36,7 @@ class TradeBot {
       );
 
       this.positions = this.positions.filter((e) => e !== found);
+      this.positions.splice(this.positions.indexOf(found), 1);
       this.all.push(found[1]);
 
       this.cach +=
@@ -46,7 +47,7 @@ class TradeBot {
       if (this.today_percentage[0] >= -5) {
         let d = new Date(position.entry_time.getTime());
         d.setDate(d.getDate() + 1);
-        d.setHours(5);
+        d.setHours(0);
         d.setMinutes(0);
         d.setSeconds(0);
 
