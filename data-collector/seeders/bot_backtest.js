@@ -80,6 +80,7 @@ class TradeBot {
           },
         },
         {
+          strategy: "bullish_divergence",
           //   takeprofit: 2,
           stoploss: {
             [Op.between]: [1, 10],
