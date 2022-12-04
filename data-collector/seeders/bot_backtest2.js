@@ -98,6 +98,6 @@ class TradeBot {
   fs.writeFileSync(process.argv[2], JSON.stringify(rows));
 
   console.log("Percentage: ", bot.percentage);
-  console.log("Opened pos: ", rows.count);
+  console.log("Opened pos: ", rows.length);
   process.exit();
 })();

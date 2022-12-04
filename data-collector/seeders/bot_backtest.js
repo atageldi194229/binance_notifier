@@ -8,6 +8,7 @@ class TradeBot {
   constructor(cash = 10000, max_position_count = 10) {
     this.cash = cash;
     this.max_position_count = max_position_count;
+    this.all = [];
     this.positions = [];
     this.percentage = 0;
     this.today_percentage = [0, new Date(2000, 0).getTime()];
@@ -32,6 +33,7 @@ class TradeBot {
       );
 
       this.positions = this.positions.filter((e) => e !== found);
+      this.all.push(found[1]);
 
       //   this.cach +=
       //     found[0] * this.max_position_count * found[1].win_percentage + found[0];
@@ -60,6 +62,7 @@ class TradeBot {
     for (let [amount, position] of this.positions) {
       //   this.cach +=
       //     amount * this.max_position_count * position.win_percentage + amount;
+      this.all.push(position);
       this.percentage += position.win_percentage;
     }
 
@@ -98,6 +101,16 @@ class TradeBot {
 
   bot.closeAll();
 
+  let rows = JSON.parse(JSON.stringify(bot.all));
+
+  for (let e of rows) {
+    e.entry_time = new Date(e.entry_time).getTime();
+    e.close_time = new Date(e.close_time).getTime();
+  }
+
+  fs.writeFileSync(process.argv[2], JSON.stringify(rows));
+
   console.log("Percentage: ", bot.percentage);
+  console.log("Opened pos: ", rows.length);
   process.exit();
 })();
