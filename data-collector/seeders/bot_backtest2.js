@@ -87,13 +87,6 @@ class TradeBot {
 
   bot.closeAll();
 
-  for (let e of bot.all) {
-    e.entry_time = new Date(e.entry_time).getTime();
-    e.close_time = new Date(e.close_time).getTime();
-  }
-
-  // fs.writeFileSync(process.argv[2], JSON.stringify(bot.all));
-
   console.log("Percentage: ", bot.percentage);
   console.log("Opened pos: ", bot.all.count);
   process.exit();
