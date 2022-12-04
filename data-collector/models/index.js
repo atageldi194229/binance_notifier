@@ -58,3 +58,4 @@ exports.Sequelize = Sequelize;
 
 // News
 exports.DataEntry = db.DataEntry;
+exports.Position = db.Position;
