@@ -65,7 +65,7 @@ class TradeBot {
 
   closeAll() {
     for (let position of this.positions) {
-      this.cash += found.amount * (position.win_percentage / 100 + 1);
+      this.cash += position.amount * (position.win_percentage / 100 + 1);
       this.all.push(position);
       this.percentage += position.win_percentage;
     }
