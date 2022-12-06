@@ -82,14 +82,15 @@ class TradeBot {
     order: [["entry_time", "asc"]],
     where: {
       [Op.and]: [
-        // {
-        //   entry_time: {
-        //     [Op.between]: [new Date(2020, 0), new Date(2021, 0)],
-        //   },
-        // },
         {
-          //   strategy: "bearish_divergence",
-          strategy: "bearish_divergence_1-3",
+          entry_time: {
+            [Op.between]: [new Date(2021, 3), new Date(2021, 3, 30)],
+          },
+        },
+        {
+          strategy: "bearish_divergence",
+          // strategy: "bearish_divergence_1-3",
+          // strategy: ["bearish_divergence", "bullish_divergence"],
           //   strategy: "bullish_divergence",/
           //   takeprofit: 2,
           trade_interval: "15m",
