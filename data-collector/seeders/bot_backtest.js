@@ -123,10 +123,6 @@ class TradeBot {
 }
 
 (async () => {
-  let bot = new TradeBot();
-
-  console.log(await Position.count());
-
   const positions = await Position.findAll({
     order: [
       ["id", "asc"],
@@ -157,6 +153,8 @@ class TradeBot {
   });
 
   console.log("Positions: ", positions.length);
+
+  let bot = new TradeBot();
 
   for (let p of positions) {
     bot.addPosition(p.toJSON());
