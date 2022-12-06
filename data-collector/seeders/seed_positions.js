@@ -5,6 +5,9 @@ const path = require("path");
 let backtest_dir = process.argv[2];
 
 (async () => {
+  console.log(process.argv);
+  console.log(backtest_dir);
+
   let files = fs.readdirSync(backtest_dir).filter((e) => e.endsWith(".json"));
 
   console.log(files);
