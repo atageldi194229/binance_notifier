@@ -31,6 +31,7 @@ class TradeBot {
   }
 
   closePosition(position) {
+    console.log(this.positions.map((e) => e.win_percentage));
     this.positions.splice(this.positions.indexOf(position), 1);
     this.all.push(position);
 
@@ -79,7 +80,6 @@ class TradeBot {
       this.closePosition(c_position);
 
       if (this.today_percentage <= -5) {
-        console.log(position.entry_time, new Date(position.entry_time));
         let d = new Date(position.entry_time);
         d.setDate(d.getDate() + 1);
         d.setHours(0);
@@ -88,7 +88,6 @@ class TradeBot {
 
         this.closeAllPositions();
         this.today_percentage = 0;
-        console.log(this.block_trading_until, d);
         this.block_trading_until = d;
       }
 
