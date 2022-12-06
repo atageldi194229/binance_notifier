@@ -59,6 +59,7 @@ class TradeBot {
     }
 
     console.log(minIndex);
+    if (minIndex === -1) return null;
     return this.positions[minIndex];
   }
 
@@ -67,6 +68,7 @@ class TradeBot {
 
     if (!this.addPositionToBox(position)) {
       let c_position = this.getPositionWithMinCloseTime();
+      console.log(this.positions.length, c_position !== null);
 
       if (
         position_entry_time.getTime() <
