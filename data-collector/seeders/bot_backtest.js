@@ -58,6 +58,7 @@ class TradeBot {
       }
     }
 
+    console.log(minIndex);
     return this.positions[minIndex];
   }
 
