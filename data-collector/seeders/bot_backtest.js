@@ -65,8 +65,8 @@ class TradeBot {
     ) {
       return;
     }
+
     if (!this.openPosition(position)) {
-      console.log(this.positions.length, this.block_trading_until);
       let c_position = this.getPositionWithMinCloseTime();
 
       if (
@@ -114,7 +114,10 @@ class TradeBot {
   console.log(await Position.count());
 
   const positions = await Position.findAll({
-    order: [["entry_time", "asc"]],
+    order: [
+      ["id", "asc"],
+      ["entry_time", "asc"],
+    ],
     where: {
       [Op.and]: [
         {
