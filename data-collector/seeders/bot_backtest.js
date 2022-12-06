@@ -21,8 +21,10 @@ class TradeBot {
     // if (position.entry_time.getTime() <= this.today_percentage[1]) return;
 
     let position_entry_time = new Date(position.entry_time);
+    let empty = this.max_position_count - this.positions.length;
 
-    if (this.max_position_count - this.positions.length > 0) {
+    if (empty > 0) {
+      position.amount = this.cash / empty;
       this.positions.push(position);
     } else {
       let min_close_time = Math.min(
@@ -38,7 +40,7 @@ class TradeBot {
       this.positions.splice(this.positions.indexOf(found), 1);
       this.all.push(found);
 
-      this.cash *= found.win_percentage / 100 + 1;
+      this.cash += found.amount * (found.win_percentage / 100 + 1);
       this.percentage += found.win_percentage;
       this.today_percentage += found.win_percentage;
 
@@ -55,13 +57,15 @@ class TradeBot {
 
       // if (position.entry_time.getTime() <= this.today_percentage[1]) return;
 
+      empty = this.max_position_count - this.positions.length;
+      position.amount = this.cash / empty;
       this.positions.push(position);
     }
   }
 
   closeAll() {
     for (let position of this.positions) {
-      this.cash *= position.win_percentage / 10 + 1;
+      this.cash += found.amount * (position.win_percentage / 100 + 1);
       this.all.push(position);
       this.percentage += position.win_percentage;
     }
