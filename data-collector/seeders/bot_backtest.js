@@ -58,8 +58,10 @@ class TradeBot {
       // if (position.entry_time.getTime() <= this.today_percentage[1]) return;
 
       empty = this.max_position_count - this.positions.length;
-      position.amount = this.cash / empty;
-      this.positions.push(position);
+      if (empty > 0) {
+        position.amount = this.cash / empty;
+        this.positions.push(position);
+      }
     }
   }
 
