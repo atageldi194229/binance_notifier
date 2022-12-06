@@ -41,7 +41,7 @@ class TradeBot {
       this.positions.length,
       this.positions
         .map((e) => e.amount * (e.win_percentage / 100 + 1))
-        .reduce((p, c) => p + c, 0)
+        .reduce((p, c) => p + c, 0) + this.cash
     );
     this.percentage += position.win_percentage;
     this.today_percentage += position.win_percentage;
