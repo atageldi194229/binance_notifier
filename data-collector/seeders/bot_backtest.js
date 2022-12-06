@@ -87,6 +87,7 @@ class TradeBot {
 
         this.closeAllPositions();
         this.today_percentage = 0;
+        console.log(this.block_trading_until, d);
         this.block_trading_until = d;
       }
 
