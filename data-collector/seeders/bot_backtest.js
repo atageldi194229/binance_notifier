@@ -98,7 +98,7 @@ class TradeBot {
   console.log("Positions: ", positions.length);
 
   for (let p of positions) {
-    bot.addPosition(p.toJson());
+    bot.addPosition(p.toJSON());
   }
 
   bot.closeAll();
