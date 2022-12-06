@@ -14,6 +14,7 @@ class TradeBot {
     this.positions = [];
     this.percentage = 0;
     this.today_percentage = 0;
+    this.last_day = 0;
     this.block_trading_until = new Date(1990, 0);
   }
 
@@ -66,6 +67,11 @@ class TradeBot {
 
   addPosition(position) {
     let position_entry_time = new Date(position.entry_time);
+
+    if (this.last_day !== position_entry_time.getDate()) {
+      this.last_day = position_entry_time.getDate();
+      this.today_percentage = 0;
+    }
 
     // if (
     //   new Date(position.entry_time).getTime() <=
