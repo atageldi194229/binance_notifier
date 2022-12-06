@@ -17,11 +17,12 @@ class TradeBot {
     this.block_trading_until = new Date(1990, 0);
   }
 
-  addPositionToBox(position) {
+  openPosition(position) {
     let empty = this.max_position_count - this.positions.length;
 
     if (empty > 0) {
       position.amount = this.cash / empty;
+      this.cash -= position.amount;
       this.positions.push(position);
       return true;
     }
@@ -65,7 +66,7 @@ class TradeBot {
       return;
     }
 
-    if (!this.addPositionToBox(position)) {
+    if (!this.openPosition(position)) {
       let c_position = this.getPositionWithMinCloseTime();
       console.log(
         this.positions.length,
@@ -101,7 +102,7 @@ class TradeBot {
         return;
       }
 
-      this.addPositionToBox(position);
+      this.openPosition(position);
     }
   }
 
