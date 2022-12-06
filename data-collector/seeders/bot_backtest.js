@@ -44,6 +44,7 @@ class TradeBot {
     let minIndex = -1;
 
     for (let i = 0; i < this.positions.length; i++) {
+      console.log(this.positions[i].close_time);
       let time = new Date(this.positions[i].close_time);
 
       if (time.getTime() < minTime.getTime()) {
