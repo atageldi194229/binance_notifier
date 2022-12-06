@@ -68,11 +68,6 @@ class TradeBot {
 
     if (!this.openPosition(position)) {
       let c_position = this.getPositionWithMinCloseTime();
-      console.log(
-        this.positions.length,
-        c_position !== null,
-        this.block_trading_until
-      );
 
       if (
         position_entry_time.getTime() <
@@ -83,7 +78,7 @@ class TradeBot {
 
       this.closePosition(c_position);
 
-      if (this.today_percentage >= -5) {
+      if (this.today_percentage <= -5) {
         let d = new Date(position_entry_time.getTime());
         d.setDate(d.getDate() + 1);
         d.setHours(0);
