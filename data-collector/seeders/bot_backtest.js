@@ -21,7 +21,8 @@ class TradeBot {
     let empty = this.max_position_count - this.positions.length;
 
     if (empty > 0) {
-      position.amount = 10;
+      // position.amount = 10;
+      position.amount = this.cash / empty;
       this.cash -= position.amount;
       this.positions.push(position);
       return true;
@@ -35,7 +36,13 @@ class TradeBot {
     this.all.push(position);
 
     this.cash += position.amount * (position.win_percentage / 100 + 1);
-    console.log(this.cash, this.positions.length);
+    console.log(
+      this.cash,
+      this.positions.length,
+      this.positions
+        .map((e) => e.amount * (e.win_percentage / 100 + 1))
+        .reduce((p, c) => p + c, 0)
+    );
     this.percentage += position.win_percentage;
     this.today_percentage += position.win_percentage;
   }
