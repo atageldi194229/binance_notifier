@@ -67,6 +67,7 @@ class TradeBot {
     }
 
     if (!this.openPosition(position)) {
+      console.log(this.positions.length, block_trading_until);
       let c_position = this.getPositionWithMinCloseTime();
 
       if (
