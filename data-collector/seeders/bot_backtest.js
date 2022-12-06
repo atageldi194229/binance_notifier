@@ -30,7 +30,7 @@ class TradeBot {
       if (position.entry_time.getTime() < min_close_time) return;
 
       let found = this.positions.find(
-        ([, e]) => e.close_time.getTime() === min_close_time
+        (e) => e.close_time.getTime() === min_close_time
       );
 
       this.positions.splice(this.positions.indexOf(found), 1);
