@@ -22,7 +22,7 @@ class TradeBot {
       new Date(position.entry_time).getTime() <=
       this.block_trading_until.getTime()
     ) {
-      return;
+      return false;
     }
 
     let empty = this.max_position_count - this.positions.length;
@@ -66,6 +66,11 @@ class TradeBot {
     let position_entry_time = new Date(position.entry_time);
 
     if (!this.addPositionToBox(position)) {
+      console.log(
+        this.positions.length,
+        this.block_trading_until,
+        position.entry_time
+      );
       let c_position = this.getPositionWithMinCloseTime();
 
       if (
