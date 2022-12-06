@@ -31,7 +31,6 @@ class TradeBot {
   }
 
   closePosition(position) {
-    console.log(this.positions.map((e) => e.win_percentage));
     this.positions.splice(this.positions.indexOf(position), 1);
     this.all.push(position);
 
@@ -153,11 +152,6 @@ class TradeBot {
   bot.closeAllPositions();
 
   let rows = JSON.parse(JSON.stringify(bot.all));
-
-  for (let e of rows) {
-    e.entry_time = new Date(e.entry_time).getTime();
-    e.close_time = new Date(e.close_time).getTime();
-  }
 
   fs.writeFileSync(process.argv[2], JSON.stringify(rows));
 
