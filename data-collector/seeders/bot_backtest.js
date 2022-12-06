@@ -35,12 +35,12 @@ class TradeBot {
     this.positions.splice(this.positions.indexOf(position), 1);
     this.all.push(position);
 
-    this.cash += position.amount * (position.win_percentage / 100 + 1);
+    this.cash += position.amount * (position.win_percentage / 10 + 1);
     console.log(
       this.cash,
       this.positions.length,
       this.positions
-        .map((e) => e.amount * (e.win_percentage / 100 + 1))
+        .map((e) => e.amount * (e.win_percentage / 10 + 1))
         .reduce((p, c) => p + c, 0) + this.cash
     );
     this.percentage += position.win_percentage;
