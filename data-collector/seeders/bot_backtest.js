@@ -7,7 +7,7 @@ const {
 const fs = require("fs");
 
 class TradeBot {
-  constructor(cash = 1, max_position_count = 10) {
+  constructor(cash = 100, max_position_count = 10) {
     this.cash = cash;
     this.max_position_count = max_position_count;
     this.all = [];
@@ -17,16 +17,33 @@ class TradeBot {
     this.block_trading_until = new Date(1990, 0);
   }
 
-  addPosition(position) {
-    // if (position.entry_time.getTime() <= this.today_percentage[1]) return;
+  addPositionToBox(position) {
+    // if (position.entry_time.getTime() <= this.block_trading_until) return;
 
-    let position_entry_time = new Date(position.entry_time);
     let empty = this.max_position_count - this.positions.length;
 
     if (empty > 0) {
       position.amount = this.cash / empty;
       this.positions.push(position);
-    } else {
+      return true;
+    }
+
+    return false;
+  }
+
+  closePosition(position) {
+    this.positions.splice(this.positions.indexOf(position), 1);
+    this.all.push(position);
+
+    this.cash += position.amount * (position.win_percentage / 100 + 1);
+    this.percentage += position.win_percentage;
+    this.today_percentage += position.win_percentage;
+  }
+
+  addPosition(position) {
+    let position_entry_time = new Date(position.entry_time);
+
+    if (!this.addPositionToBox(position)) {
       let min_close_time = Math.min(
         ...this.positions.map((e) => new Date(e.close_time).getTime())
       );
@@ -34,15 +51,10 @@ class TradeBot {
       if (position_entry_time.getTime() < min_close_time) return;
 
       let found = this.positions.find(
-        (e) => e.close_time.getTime() === min_close_time
+        (e) => new Date(e.close_time).getTime() === min_close_time
       );
 
-      this.positions.splice(this.positions.indexOf(found), 1);
-      this.all.push(found);
-
-      this.cash += found.amount * (found.win_percentage / 100 + 1);
-      this.percentage += found.win_percentage;
-      this.today_percentage += found.win_percentage;
+      this.closePosition(found);
 
       if (this.today_percentage >= -5) {
         let d = new Date(position_entry_time.getTime());
@@ -55,13 +67,7 @@ class TradeBot {
         this.block_trading_until = d.getTime();
       }
 
-      // if (position.entry_time.getTime() <= this.today_percentage[1]) return;
-
-      empty = this.max_position_count - this.positions.length;
-      if (empty > 0) {
-        position.amount = this.cash / empty;
-        this.positions.push(position);
-      }
+      this.addPositionToBox(position);
     }
   }
 
