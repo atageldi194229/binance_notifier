@@ -20,14 +20,16 @@ class TradeBot {
   addPosition(position) {
     // if (position.entry_time.getTime() <= this.today_percentage[1]) return;
 
+    let position_entry_time = new Date(position.entry_time);
+
     if (this.max_position_count - this.positions.length > 0) {
       this.positions.push(position);
     } else {
       let min_close_time = Math.min(
-        ...this.positions.map((e) => e.close_time.getTime())
+        ...this.positions.map((e) => new Date(e.close_time).getTime())
       );
 
-      if (position.entry_time.getTime() < min_close_time) return;
+      if (position_entry_time.getTime() < min_close_time) return;
 
       let found = this.positions.find(
         (e) => e.close_time.getTime() === min_close_time
@@ -41,7 +43,7 @@ class TradeBot {
       this.today_percentage += found.win_percentage;
 
       if (this.today_percentage >= -5) {
-        let d = new Date(position.entry_time.getTime());
+        let d = new Date(position_entry_time.getTime());
         d.setDate(d.getDate() + 1);
         d.setHours(0);
         d.setMinutes(0);
