@@ -73,10 +73,7 @@ class TradeBot {
       this.today_percentage = 0;
     }
 
-    if (
-      new Date(position.entry_time).getTime() <=
-      this.block_trading_until.getTime()
-    ) {
+    if (position.entry_time <= this.block_trading_until.getTime()) {
       return;
     }
 
@@ -104,10 +101,7 @@ class TradeBot {
         this.block_trading_until = d;
       }
 
-      if (
-        new Date(position.entry_time).getTime() <=
-        this.block_trading_until.getTime()
-      ) {
+      if (position.entry_time <= this.block_trading_until.getTime()) {
         return;
       }
 
@@ -160,7 +154,7 @@ class TradeBot {
     bot.addPosition(p.toJSON());
   }
 
-  bot.closeAllPositions();
+  await bot.closeAllPositions();
 
   let rows = JSON.parse(JSON.stringify(bot.all));
 
