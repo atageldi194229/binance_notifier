@@ -36,7 +36,7 @@ class TradeBot {
       this.positions.splice(this.positions.indexOf(found), 1);
       this.all.push(found);
 
-      this.cash *= found.win_percentage / 10 + 1;
+      this.cash *= found.win_percentage / 100 + 1;
       this.percentage += found.win_percentage;
       this.today_percentage += found.win_percentage;
 
@@ -98,7 +98,7 @@ class TradeBot {
   console.log("Positions: ", positions.length);
 
   for (let p of positions) {
-    bot.addPosition(p);
+    bot.addPosition(p.toJson());
   }
 
   bot.closeAll();
