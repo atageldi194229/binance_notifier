@@ -18,13 +18,6 @@ class TradeBot {
   }
 
   addPositionToBox(position) {
-    if (
-      new Date(position.entry_time).getTime() <=
-      this.block_trading_until.getTime()
-    ) {
-      return false;
-    }
-
     let empty = this.max_position_count - this.positions.length;
 
     if (empty > 0) {
@@ -65,6 +58,13 @@ class TradeBot {
   addPosition(position) {
     let position_entry_time = new Date(position.entry_time);
 
+    if (
+      new Date(position.entry_time).getTime() <=
+      this.block_trading_until.getTime()
+    ) {
+      return;
+    }
+
     if (!this.addPositionToBox(position)) {
       let c_position = this.getPositionWithMinCloseTime();
       console.log(
@@ -91,6 +91,13 @@ class TradeBot {
 
         this.today_percentage = 0;
         this.block_trading_until = d;
+      }
+
+      if (
+        new Date(position.entry_time).getTime() <=
+        this.block_trading_until.getTime()
+      ) {
+        return;
       }
 
       this.addPositionToBox(position);
