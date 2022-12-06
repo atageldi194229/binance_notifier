@@ -35,6 +35,7 @@ class TradeBot {
     this.all.push(position);
 
     this.cash += position.amount * (position.win_percentage / 100 + 1);
+    console.log(this.cash, this.positions.length);
     this.percentage += position.win_percentage;
     this.today_percentage += position.win_percentage;
   }
