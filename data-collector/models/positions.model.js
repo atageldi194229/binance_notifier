@@ -17,10 +17,12 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       close_price: { type: DataTypes.FLOAT },
-      close_time: { type: DataTypes.BIGINT
+      close_time: {
+        type: DataTypes.BIGINT,
         get() {
           return parseInt(this.getDataValue("close_time"));
-        }, },
+        },
+      },
       win: { type: DataTypes.INTEGER },
       win_percentage: { type: DataTypes.FLOAT },
     },
