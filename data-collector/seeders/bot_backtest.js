@@ -73,12 +73,12 @@ class TradeBot {
       this.today_percentage = 0;
     }
 
-    // if (
-    //   new Date(position.entry_time).getTime() <=
-    //   this.block_trading_until.getTime()
-    // ) {
-    //   return;
-    // }
+    if (
+      new Date(position.entry_time).getTime() <=
+      this.block_trading_until.getTime()
+    ) {
+      return;
+    }
 
     if (!this.openPosition(position)) {
       let c_position = this.getPositionWithMinCloseTime();
@@ -104,12 +104,12 @@ class TradeBot {
         this.block_trading_until = d;
       }
 
-      // if (
-      //   new Date(position.entry_time).getTime() <=
-      //   this.block_trading_until.getTime()
-      // ) {
-      //   return;
-      // }
+      if (
+        new Date(position.entry_time).getTime() <=
+        this.block_trading_until.getTime()
+      ) {
+        return;
+      }
 
       this.openPosition(position);
     }
