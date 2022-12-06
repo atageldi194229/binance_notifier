@@ -116,36 +116,34 @@ class TradeBot {
   }
 }
 
-(async () => {
-  const positions = await Position.findAll({
-    order: [
-      ["id", "asc"],
-      ["entry_time", "asc"],
+Position.findAll({
+  order: [
+    ["id", "asc"],
+    ["entry_time", "asc"],
+  ],
+  where: {
+    [Op.and]: [
+      {
+        entry_time: {
+          [Op.between]: [
+            new Date(2021, 3).getTime(),
+            new Date(2021, 4).getTime(),
+          ],
+        },
+      },
+      {
+        strategy: "bearish_divergence",
+        // strategy: "bearish_divergence_1-3",
+        // strategy: ["bearish_divergence", "bullish_divergence"],
+        //   strategy: "bullish_divergence",/
+        trade_interval: "15m",
+        stoploss: {
+          [Op.between]: [1, 10],
+        },
+      },
     ],
-    where: {
-      [Op.and]: [
-        {
-          entry_time: {
-            [Op.between]: [
-              new Date(2021, 3).getTime(),
-              new Date(2021, 4).getTime(),
-            ],
-          },
-        },
-        {
-          strategy: "bearish_divergence",
-          // strategy: "bearish_divergence_1-3",
-          // strategy: ["bearish_divergence", "bullish_divergence"],
-          //   strategy: "bullish_divergence",/
-          trade_interval: "15m",
-          stoploss: {
-            [Op.between]: [1, 10],
-          },
-        },
-      ],
-    },
-  });
-
+  },
+}).then((positions) => {
   console.log("Positions: ", positions.length);
 
   let bot = new TradeBot();
@@ -154,7 +152,7 @@ class TradeBot {
     bot.addPosition(p.toJSON());
   }
 
-  await bot.closeAllPositions();
+  bot.closeAllPositions();
 
   let rows = JSON.parse(JSON.stringify(bot.all));
 
@@ -164,4 +162,4 @@ class TradeBot {
   console.log("Cash: ", bot.cash);
   console.log("Opened pos: ", rows.length);
   process.exit();
-})();
+});
