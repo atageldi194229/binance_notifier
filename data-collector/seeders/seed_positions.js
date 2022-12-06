@@ -16,7 +16,13 @@ let backtest_dir = process.argv[2];
     let file = files[i];
     let data = JSON.parse(fs.readFileSync(path.join(backtest_dir, file)));
 
-    await Position.bulkCreate(data);
+    try {
+      await Position.bulkCreate(data);
+    } catch (err) {
+      for (let row of data) {
+        await Position.create(row).catch(console.error);
+      }
+    }
   }
 
   // end process
