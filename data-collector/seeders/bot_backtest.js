@@ -113,6 +113,8 @@ class TradeBot {
     for (let position of this.positions) {
       this.closePosition(position);
     }
+
+    console.log("close_all, ", this.positions.length);
   }
 }
 
@@ -152,6 +154,11 @@ Position.findAll({
     bot.addPosition(p.toJSON());
   }
 
+  bot.closeAllPositions();
+  bot.closeAllPositions();
+  bot.closeAllPositions();
+  bot.closeAllPositions();
+  bot.closeAllPositions();
   bot.closeAllPositions();
 
   let rows = JSON.parse(JSON.stringify(bot.all));
