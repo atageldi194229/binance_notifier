@@ -21,8 +21,8 @@ class TradeBot {
     let empty = this.max_position_count - this.positions.length;
 
     if (empty > 0) {
-      // position.amount = 10;
-      position.amount = this.cash / empty;
+      position.amount = 10;
+      // position.amount = this.cash / empty;
       this.cash -= position.amount;
       this.positions.push(position);
       return true;
