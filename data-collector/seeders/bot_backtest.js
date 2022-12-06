@@ -89,6 +89,7 @@ class TradeBot {
         d.setMinutes(0);
         d.setSeconds(0);
 
+        this.closeAllPositions();
         this.today_percentage = 0;
         this.block_trading_until = d;
       }
@@ -104,14 +105,10 @@ class TradeBot {
     }
   }
 
-  closeAll() {
+  closeAllPositions() {
     for (let position of this.positions) {
-      this.cash += position.amount * (position.win_percentage / 100 + 1);
-      this.all.push(position);
-      this.percentage += position.win_percentage;
+      this.closePosition(position);
     }
-
-    this.positions = [];
   }
 }
 
@@ -148,7 +145,7 @@ class TradeBot {
     bot.addPosition(p.toJSON());
   }
 
-  bot.closeAll();
+  bot.closeAllPositions();
 
   let rows = JSON.parse(JSON.stringify(bot.all));
 
