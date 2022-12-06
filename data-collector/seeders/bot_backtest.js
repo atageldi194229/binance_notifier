@@ -7,26 +7,24 @@ const {
 const fs = require("fs");
 
 class TradeBot {
-  constructor(cash = 10000, max_position_count = 10) {
+  constructor(cash = 1, max_position_count = 10) {
     this.cash = cash;
     this.max_position_count = max_position_count;
     this.all = [];
     this.positions = [];
     this.percentage = 0;
-    this.today_percentage = [0, new Date(2000, 0).getTime()];
+    this.today_percentage = 0;
+    this.block_trading_until = new Date(1990, 0);
   }
 
   addPosition(position) {
     // if (position.entry_time.getTime() <= this.today_percentage[1]) return;
 
-    let available_position_count =
-      this.max_position_count - this.positions.length;
-    if (available_position_count > 0) {
-      let amount = this.cash / available_position_count;
-      this.positions.push([amount, position]);
+    if (this.max_position_count - this.positions.length > 0) {
+      this.positions.push(position);
     } else {
       let min_close_time = Math.min(
-        ...this.positions.map(([, e]) => e.close_time.getTime())
+        ...this.positions.map((e) => e.close_time.getTime())
       );
 
       if (position.entry_time.getTime() < min_close_time) return;
@@ -36,37 +34,32 @@ class TradeBot {
       );
 
       this.positions.splice(this.positions.indexOf(found), 1);
-      this.all.push(found[1]);
+      this.all.push(found);
 
-      this.cash +=
-        found[0] * this.max_position_count * found[1].win_percentage + found[0];
-      this.percentage += found[1].win_percentage;
-      this.today_percentage[0] += found[1].win_percentage;
+      this.cash *= found.win_percentage / 100 + 1;
+      this.percentage += found.win_percentage;
+      this.today_percentage += found.win_percentage;
 
-      if (this.today_percentage[0] >= -5) {
+      if (this.today_percentage >= -5) {
         let d = new Date(position.entry_time.getTime());
         d.setDate(d.getDate() + 1);
         d.setHours(0);
         d.setMinutes(0);
         d.setSeconds(0);
 
-        this.today_percentage[0] = 0;
-        this.today_percentage[1] = d.getTime();
+        this.today_percentage = 0;
+        this.block_trading_until = d.getTime();
       }
 
       // if (position.entry_time.getTime() <= this.today_percentage[1]) return;
 
-      available_position_count =
-        this.max_position_count - this.positions.length;
-      let amount = this.cash / available_position_count;
-      this.positions.push([amount, position]);
+      this.positions.push(position);
     }
   }
 
   closeAll() {
-    for (let [amount, position] of this.positions) {
-      this.cash +=
-        amount * this.max_position_count * position.win_percentage + amount;
+    for (let position of this.positions) {
+      this.cash *= found.win_percentage / 10 + 1;
       this.all.push(position);
       this.percentage += position.win_percentage;
     }
