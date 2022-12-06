@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       entry_time: { type: DataTypes.DATE },
       close_price: { type: DataTypes.FLOAT },
       close_time: { type: DataTypes.DATE },
-      win: { type: DataTypes.INTEGER(1) },
+      win: { type: DataTypes.INTEGER },
       win_percentage: { type: DataTypes.FLOAT },
     },
     {
