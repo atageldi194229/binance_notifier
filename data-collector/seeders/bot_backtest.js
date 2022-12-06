@@ -111,6 +111,8 @@ class TradeBot {
 (async () => {
   let bot = new TradeBot();
 
+  console.log(await Position.count());
+
   const positions = await Position.findAll({
     order: [["entry_time", "asc"]],
     where: {
