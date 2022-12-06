@@ -10,9 +10,17 @@ module.exports = (sequelize, DataTypes) => {
       takeprofit: { type: DataTypes.FLOAT },
       stoploss: { type: DataTypes.FLOAT },
       entry_price: { type: DataTypes.FLOAT },
-      entry_time: { type: DataTypes.BIGINT },
+      entry_time: {
+        type: DataTypes.BIGINT,
+        get() {
+          return parseInt(this.getDataValue("entry_time"));
+        },
+      },
       close_price: { type: DataTypes.FLOAT },
-      close_time: { type: DataTypes.BIGINT },
+      close_time: { type: DataTypes.BIGINT
+        get() {
+          return parseInt(this.getDataValue("close_time"));
+        }, },
       win: { type: DataTypes.INTEGER },
       win_percentage: { type: DataTypes.FLOAT },
     },
