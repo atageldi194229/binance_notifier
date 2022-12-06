@@ -50,7 +50,7 @@ class TradeBot {
     let minIndex = -1;
 
     for (let i = 0; i < this.positions.length; i++) {
-      let time = new Date(this.positions.close_time);
+      let time = new Date(this.positions[i].close_time);
 
       if (time.getTime() < minTime.getTime()) {
         minTime = time;
@@ -66,11 +66,6 @@ class TradeBot {
     let position_entry_time = new Date(position.entry_time);
 
     if (!this.addPositionToBox(position)) {
-      console.log(
-        this.positions.length,
-        this.block_trading_until,
-        position.entry_time
-      );
       let c_position = this.getPositionWithMinCloseTime();
 
       if (
