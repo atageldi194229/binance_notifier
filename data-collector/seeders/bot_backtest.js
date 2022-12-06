@@ -18,7 +18,12 @@ class TradeBot {
   }
 
   addPositionToBox(position) {
-    // if (position.entry_time.getTime() <= this.block_trading_until) return;
+    if (
+      new Date(position.entry_time).getTime() <=
+      this.block_trading_until.getTime()
+    ) {
+      return;
+    }
 
     let empty = this.max_position_count - this.positions.length;
 
@@ -79,7 +84,7 @@ class TradeBot {
         d.setSeconds(0);
 
         this.today_percentage = 0;
-        this.block_trading_until = d.getTime();
+        this.block_trading_until = d;
       }
 
       this.addPositionToBox(position);
