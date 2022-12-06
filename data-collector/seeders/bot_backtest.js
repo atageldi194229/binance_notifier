@@ -79,6 +79,7 @@ class TradeBot {
       this.closePosition(c_position);
 
       if (this.today_percentage <= -5) {
+        console.log(position.entry_time, new Date(position.entry_time));
         let d = new Date(position.entry_time);
         d.setDate(d.getDate() + 1);
         d.setHours(0);
