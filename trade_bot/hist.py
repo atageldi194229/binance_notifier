@@ -6,15 +6,23 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-df = pd.read_csv("backtest_data.csv", usecols=['win', 'stoploss', 'trade_interval', 'strategy'])
+df = pd.read_csv("Result_2.5 TP.csv", usecols=['win', 'stoploss', 'trade_interval', 'strategy'])
 
-df = df[df['trade_interval'] == '5m']
-df = df[df['strategy'] == 'bearish_divergence']
+df = df[df['trade_interval'] == '15m']
+# df = df[df['strategy'] == 'bearish_divergence']
+df = df[df['strategy'] == 'bullish_divergence']
 
 # df2 = df.copy()
 # df = df[df['win'] == 0]
 
-df.hist(column='stoploss', bins=50, by='win')
+wins = df.copy()
+wins = wins[wins['win'] == 1]
+
+
+losses = df.copy()
+losses = losses[losses['win'] == 0]
+
+# df.hist(column='stoploss', bins=50, by='win')
 
 # df.plot(kind='hist',
 #         alpha=0.7,
@@ -29,4 +37,5 @@ df.hist(column='stoploss', bins=50, by='win')
 # plt.xlabel('Stoploss')
 # plt.ylabel('Wins, Loss')
 
+plt.hist([wins['stoploss'], losses['stoploss']], bins=150, label=['win', 'loss'])
 plt.show()

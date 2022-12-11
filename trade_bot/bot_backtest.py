@@ -136,7 +136,8 @@ def strategy_backtest(df, strategy):
 
 def run():
 
-  df = pd.read_csv("backtest_data.csv")
+  df = pd.read_csv("Result_2.5 TP.csv")
+#   df = pd.read_csv("backtest_data.csv")
   df = df.sort_values(['entry_time', 'trade_symbol'])
 
   print(df['strategy'].unique())
@@ -144,9 +145,9 @@ def run():
   for strategy in df['strategy'].unique():
     # Filters
     df2 = df.copy()
-    df2 = df2[df2['trade_interval'] == '5m']
+    df2 = df2[df2['trade_interval'] == '15m']
     df2 = df2[df2['strategy'] == strategy]
-    df2 = df2[(df2['stoploss'] > 2) & (df2['stoploss'] < 6)]
+    df2 = df2[(df2['stoploss'] > 2.5) & (df2['stoploss'] < 7)]
     #   df = df[(df['entry_time'] > 1617217200000) & (df['entry_time'] < 1619809200000)]
 
     strategy_backtest(df2, strategy)
