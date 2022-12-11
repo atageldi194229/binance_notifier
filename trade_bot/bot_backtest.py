@@ -106,32 +106,25 @@ class TradeBot:
 def strategy_backtest(df, strategy):
     t_start = time.time()
     
-    # Filters
-    df2 = df.copy()
-    df2 = df2[df2['trade_interval'] == '15m']
-    df2 = df2[df2['strategy'] == strategy]
-    df2 = df2[(df2['stoploss'] > 1) & (df2['stoploss'] < 10)]
-    #   df = df[(df['entry_time'] > 1617217200000) & (df['entry_time'] < 1619809200000)]
-
     actions = []
     position_counts = []
     bot = TradeBot()
     
-    for i, pos in df2.iterrows():
+    for i, pos in df.iterrows():
         action, pos_count = bot.handle_position(pos)
         actions.append(action)
         position_counts.append(pos_count)
     
     bot.close_all_positions()
 
-    df2['action'] = actions
-    df2['position_count'] = position_counts
+    df['action'] = actions
+    df['position_count'] = position_counts
       
-    df2.to_csv(f'./result_debug_{strategy}.csv', )
+    df.to_csv(f'./result_debug_{strategy}.csv', )
     pd.DataFrame(bot.all).to_csv(f'./result_{strategy}.csv')
 
     print("For Strategy: ", strategy)
-    print("All positions: {}".format(df2.shape))
+    print("All positions: {}".format(df.shape))
     print("Percentage: {}".format(bot.percentage))
     print("Cash: {}".format(bot.cash))
     print("Opened pos: {}".format(len(bot.all)))
@@ -149,7 +142,14 @@ def run():
   print(df['strategy'].unique())
 
   for strategy in df['strategy'].unique():
-    strategy_backtest(df, strategy)
+    # Filters
+    df2 = df.copy()
+    df2 = df2[df2['trade_interval'] == '5m']
+    df2 = df2[df2['strategy'] == strategy]
+    df2 = df2[(df2['stoploss'] > 2) & (df2['stoploss'] < 6)]
+    #   df = df[(df['entry_time'] > 1617217200000) & (df['entry_time'] < 1619809200000)]
+
+    strategy_backtest(df2, strategy)
     
 
 if __name__ == "__main__":
