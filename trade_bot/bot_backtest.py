@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 class TradeBot:
-    def __init__(self, cash=10000, max_position_count = 10) -> None:
+    def __init__(self, cash=100, max_position_count = 10) -> None:
         self.cash = cash
         self.max_position_count = max_position_count
         self.all = []
@@ -21,7 +21,7 @@ class TradeBot:
         if pos['entry_time'] <= self.block_trading_until:
             return None;
         
-        empty = self.max_position_count - len(self.positions)
+        empty = self.posision_available()
         
         if empty > 0:
             pos.amount = 10
@@ -33,7 +33,17 @@ class TradeBot:
         return False
     
     def close_position(self, pos):
-        self.positions.remove(pos)
+        positions = []
+        
+        for e in self.positions:
+            # print(type(e), type(pos))
+            if not e.equals(pos):
+                positions.append(e)
+        
+        self.positions = positions
+        
+        
+        # self.positions.remove(pos)
         self.all.append(pos)
         
         self.cash += pos.amount * (pos.win_percentage / 10 + 1)
@@ -42,7 +52,7 @@ class TradeBot:
         self.today_percentage = self.today_percentage + pos.win_percentage
         
         if self.today_percentage <= -5:
-            dt = datetime.datetime.fromtimestamp(pos['close_time'] / 1000)
+            dt = datetime.datetime.fromtimestamp(pos['entry_time'] / 1000)
             dt += datetime.timedelta(days=1)
             dt = dt.replace(hour=0, minute=0, second=0, microsecond=0)
             
@@ -50,23 +60,17 @@ class TradeBot:
             self.today_percentage = 0
             self.block_trading_until = dt.timestamp() * 1000
 
-    def get_position_with_min_close_time(self):
-        if len(self.positions) == 0:
-            return ""
+    def close_all_positions_under_time(self, time):
+        closables = []
         
-        min_time = self.positions[0]['close_time']
-        min_index = 0
+        for pos in self.positions:
+            if pos['close_time'] < time:
+                closables.append(pos)
         
-        for i in range(len(self.positions)):
-            time = self.positions[i]['close_time']
+        for pos in closables:
+            self.close_position(pos)
             
-            if time < min_time:
-                min_time = time
-                min_index = i
-        
-        return self.positions[min_index]
-
-
+    
     def close_all_positions(self):
         for pos in self.positions:
             self.close_position(pos)
@@ -79,49 +83,74 @@ class TradeBot:
             self.today_percentage = 0
         
 
+    def posision_available(self):
+        return self.max_position_count - len(self.positions);
+
+
     def handle_position(self, pos):
         self.update_time(pos['entry_time'])
         
-        c_pos = self.get_position_with_min_close_time()
+        self.close_all_positions_under_time(pos['entry_time'])
         
-        if not isinstance(c_pos, str):
-            if pos['entry_time'] < c_pos['close_time']:
-                return
-            else:
-                self.close_position(c_pos)
+        res = self.open_position(pos)
         
-        self.open_position(pos)
+        if res == None:
+            return (-1, -1)
+        elif res == False:
+            return (0, -1)
+        else:
+            return (1, len(self.positions))
+        
+
+
+def strategy_backtest(df, strategy):
+    t_start = time.time()
+    
+    # Filters
+    df2 = df.copy()
+    df2 = df2[df2['trade_interval'] == '15m']
+    df2 = df2[df2['strategy'] == strategy]
+    df2 = df2[(df2['stoploss'] > 1) & (df2['stoploss'] < 10)]
+    #   df = df[(df['entry_time'] > 1617217200000) & (df['entry_time'] < 1619809200000)]
+
+    actions = []
+    position_counts = []
+    bot = TradeBot()
+    
+    for i, pos in df2.iterrows():
+        action, pos_count = bot.handle_position(pos)
+        actions.append(action)
+        position_counts.append(pos_count)
+    
+    bot.close_all_positions()
+
+    df2['action'] = actions
+    df2['position_count'] = position_counts
+      
+    df2.to_csv(f'./result_debug_{strategy}.csv', )
+    pd.DataFrame(bot.all).to_csv(f'./result_{strategy}.csv')
+
+    print("For Strategy: ", strategy)
+    print("All positions: {}".format(df2.shape))
+    print("Percentage: {}".format(bot.percentage))
+    print("Cash: {}".format(bot.cash))
+    print("Opened pos: {}".format(len(bot.all)))
+    t_end = time.time()
+    print("The time taken: ", t_end - t_start, "seconds")
+    print("\n")
+    
 
 
 def run():
-  t_start = time.time()
 
-  df = pd.read_csv("result_test.csv")
+  df = pd.read_csv("backtest_data.csv")
   df = df.sort_values(['entry_time', 'trade_symbol'])
 
-  # Filters
-  df = df[df['trade_interval'] == '15m']
-  df = df[df['strategy'] == 'bearish_divergence']
-  df = df[(df['stoploss'] > 1) & (df['stoploss'] < 10)]
-  df = df[(df['entry_time'] > 1617217200000) & (df['entry_time'] < 1619809200000)]
+  print(df['strategy'].unique())
 
-  bot = TradeBot()
+  for strategy in df['strategy'].unique():
+    strategy_backtest(df, strategy)
+    
 
-  for i, pos in df.iterrows():
-      bot.handle_position(pos)
-    #   print(pos)
-    #   break
-
-
-  t_end = time.time()
-
-  print("All positions: {}".format(df.shape))
-  print("Percentage: {}".format(bot.percentage))
-  print("Cash: {}".format(bot.cash))
-  print("Opened pos: {}".format(len(bot.all)))
-  print("The time taken: ", t_end - t_start, "seconds")
-  
-  pd.DataFrame(bot.all).to_csv('result.csv')
-  
 if __name__ == "__main__":
     run()
