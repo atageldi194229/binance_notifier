@@ -148,57 +148,6 @@ green_to_red_indexes = []
 red_to_green_indexes = []
 
 for i in range(1, len(macdhist)):
-    temp_orders = []
-    for order in orders:
-        [strategy, takeprofit, stoploss, entry_price, entry_time] = order
-        mn = 100 - (lows[i] / entry_price) * 100;
-        mx = 100 - (entry_price / highs[i]) * 100;
-        
-        if strategy in ["bearish_divergence", "bearish_divergence_1-3", "bearish_divergence_below_ema21", "bearish_divergence_below_rsi40"]:
-            if mx >= stoploss:
-                close_order(order, highs[i], rows[i][6], 0, -stoploss)
-            elif mn >= takeprofit:
-                close_order(order, lows[i], rows[i][6], 1, takeprofit)
-            else:
-                temp_orders.append(order)
-
-        if strategy in ["bullish_divergence", "bullish_divergence_above_ema21"]:
-            if mn >= stoploss:
-                close_order(order, lows[i], rows[i][6], 0, -stoploss)
-            elif mx >= takeprofit:
-                close_order(order, highs[i], rows[i][6], 1, takeprofit)
-            else:
-                temp_orders.append(order)
-        
-        if strategy == "volume_trend_long":
-            if mn >= stoploss:
-                close_order(order, lows[i], rows[i][6], 0, -stoploss)
-            elif closes[i] < ema21[i]:
-                takeprofit = round(100 - (( order[3] / closes[i] ) * 100), 2)
-                close_order(order, closes[i], rows[i][6], 1, takeprofit)
-            else:
-                temp_orders.append(order)
-
-        if strategy == "volume_trend_long":
-            if mn >= stoploss:
-                close_order(order, lows[i], rows[i][6], 0, -stoploss)
-            elif closes[i] < ema21[i]:
-                takeprofit = round(100 - (( order[3] / closes[i] ) * 100), 2)
-                close_order(order, closes[i], rows[i][6], 1, takeprofit)
-            else:
-                temp_orders.append(order)
-                
-        if strategy == "volume_trend_long_rsi50_below":
-            if mn >= stoploss:
-                close_order(order, lows[i], rows[i][6], 0, -stoploss)
-            elif rsi[i] < 50:
-                takeprofit = round(100 - (( order[3] / closes[i] ) * 100), 2)
-                close_order(order, closes[i], rows[i][6], 1, takeprofit)
-            else:
-                temp_orders.append(order)
-            
-    orders = temp_orders
-    
     h_a = macdhist[i - 1]
     h_b = macdhist[i]
     
@@ -350,7 +299,49 @@ for i in range(1, len(macdhist)):
     #     ema_4x_below_index = i
     #     print_date_time(rows[i][0], end=f'   EMA 4x below, up\n')
     #     bot.bot_send_message(result)    
-            
+    temp_orders = []
+    for order in orders:
+        [strategy, takeprofit, stoploss, entry_price, entry_time] = order
+        mn = 100 - (lows[i] / entry_price) * 100;
+        mx = 100 - (entry_price / highs[i]) * 100;
+        
+        if strategy in ["bearish_divergence", "bearish_divergence_1-3", "bearish_divergence_below_ema21", "bearish_divergence_below_rsi40"]:
+            if mx >= stoploss:
+                close_order(order, highs[i], rows[i][6], 0, -stoploss)
+            elif mn >= takeprofit:
+                close_order(order, lows[i], rows[i][6], 1, takeprofit)
+            else:
+                temp_orders.append(order)
+
+        if strategy in ["bullish_divergence", "bullish_divergence_above_ema21"]:
+            if mn >= stoploss:
+                close_order(order, lows[i], rows[i][6], 0, -stoploss)
+            elif mx >= takeprofit:
+                close_order(order, highs[i], rows[i][6], 1, takeprofit)
+            else:
+                temp_orders.append(order)
+        
+        if strategy == "volume_trend_long":
+            if mn >= stoploss:
+                close_order(order, lows[i], rows[i][6], 0, -stoploss)
+            elif closes[i] < ema21[i]:
+                tp = round(100 - (( order[3] / closes[i] ) * 100), 2)
+                close_order(order, closes[i], rows[i][6], 1, tp)
+            else:
+                temp_orders.append(order)
+                
+        if strategy == "volume_trend_long_rsi50_below":
+            if mn >= stoploss:
+                close_order(order, lows[i], rows[i][6], 0, -stoploss)
+            elif rsi[i] < 50:
+                tp = round(100 - (( order[3] / closes[i] ) * 100), 2)
+                close_order(order, closes[i], rows[i][6], 1, tp)
+            else:
+                temp_orders.append(order)
+    orders = temp_orders
+    
+    
+    
 log_file_name = f"{DIR}/{TRADE_SYMBOL}_{TRADE_INTERVAL}_orders.json"
 with open(log_file_name, "w") as outfile:
     json.dump(closed_orders, outfile)
