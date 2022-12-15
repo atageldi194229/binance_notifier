@@ -305,21 +305,21 @@ for i in range(1, len(macdhist)):
         mn = 100 - (lows[i] / entry_price) * 100;
         mx = 100 - (entry_price / highs[i]) * 100;
         
-        if strategy in ["bearish_divergence", "bearish_divergence_1-3", "bearish_divergence_below_ema21", "bearish_divergence_below_rsi40"]:
-            if mx >= stoploss:
-                close_order(order, highs[i], rows[i][6], 0, -stoploss)
-            elif mn >= takeprofit:
-                close_order(order, lows[i], rows[i][6], 1, takeprofit)
-            else:
-                temp_orders.append(order)
+        # if strategy in ["bearish_divergence", "bearish_divergence_1-3", "bearish_divergence_below_ema21", "bearish_divergence_below_rsi40"]:
+        #     if mx >= stoploss:
+        #         close_order(order, highs[i], rows[i][6], 0, -stoploss)
+        #     elif mn >= takeprofit:
+        #         close_order(order, lows[i], rows[i][6], 1, takeprofit)
+        #     else:
+        #         temp_orders.append(order)
 
-        if strategy in ["bullish_divergence", "bullish_divergence_above_ema21"]:
-            if mn >= stoploss:
-                close_order(order, lows[i], rows[i][6], 0, -stoploss)
-            elif mx >= takeprofit:
-                close_order(order, highs[i], rows[i][6], 1, takeprofit)
-            else:
-                temp_orders.append(order)
+        # if strategy in ["bullish_divergence", "bullish_divergence_above_ema21"]:
+        #     if mn >= stoploss:
+        #         close_order(order, lows[i], rows[i][6], 0, -stoploss)
+        #     elif mx >= takeprofit:
+        #         close_order(order, highs[i], rows[i][6], 1, takeprofit)
+        #     else:
+        #         temp_orders.append(order)
         
         if strategy == "volume_trend_long":
             if mn >= stoploss:
