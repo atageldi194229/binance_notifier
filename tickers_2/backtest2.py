@@ -74,7 +74,7 @@ multiplier1 = 2
 multiplier2 = 4
 
 np_volumes = np.array(volumes)
-v1 = talib.SMA(np_closes, timeperiod=55) 
+v1 = talib.SMA(np_closes, timeperiod=20) 
 v9 = (v1 * multiplier2)
 c = np_volumes > v9
 

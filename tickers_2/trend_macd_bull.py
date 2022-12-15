@@ -121,10 +121,10 @@ green_to_red_indexes = []
 red_to_green_indexes = []
 
 for i in range(1, len(macdhist)):
-    if c[i] and opens[i] > ema8[i] and closes[i] > ema8[i] and opens[i] < closes[i]:
-        stoploss = round(100 - (( ema21[i] / closes[i] ) * 100), 2)
-        print_date_time(rows[i][0], end=f'   volume_trend_long  {stoploss} \n')
-        volume_trend_long_index = i
+    # if c[i] and opens[i] > ema8[i] and closes[i] > ema8[i] and opens[i] < closes[i]:
+    #     stoploss = round(100 - (( ema21[i] / closes[i] ) * 100), 2)
+    #     print_date_time(rows[i][0], end=f'   volume_trend_long  {stoploss} \n')
+    #     volume_trend_long_index = i
     
     h_a = macdhist[i - 1]
     h_b = macdhist[i]
