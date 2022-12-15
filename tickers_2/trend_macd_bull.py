@@ -45,6 +45,8 @@ highs = np.array(rows)[:,2]
 highs = list(map(float, highs))
 lows = np.array(rows)[:,3]
 lows = list(map(float, lows))
+volumes = np.array(rows)[:,5]
+volumes = list(map(float, volumes))
 
 
 np_closes = np.array(closes)
@@ -54,6 +56,16 @@ ema233 = talib.EMA(np_closes, timeperiod=233)
 ema55 = talib.EMA(np_closes, timeperiod=55)
 ema21 = talib.EMA(np_closes, timeperiod=21)
 ema8 = talib.EMA(np_closes, timeperiod=8)
+
+
+# sma volumer
+multiplier1 = 2
+multiplier2 = 4
+
+np_volumes = np.array(volumes)
+v1 = talib.SMA(np_closes, timeperiod=20) 
+v9 = (v1 * multiplier2)
+c = np_volumes > v9
 
 # # check if macdhist is changing colors
 macdhist_last_a, macdhist_last_b = macdhist[-2], macdhist[-1]
@@ -101,12 +113,19 @@ is_last_bullish = False
 last_bullish_for_cancel = 0
 stoploss = 0
 
+volume_trend_long_index = -1
+
 is_last_bearish_divergence = 0
 
 green_to_red_indexes = []
 red_to_green_indexes = []
 
 for i in range(1, len(macdhist)):
+    if c[i] and opens[i] > ema8[i] and closes[i] > ema8[i] and opens[i] < closes[i]:
+        stoploss = round(100 - (( ema21[i] / closes[i] ) * 100), 2)
+        print_date_time(rows[i][0], end=f'   volume_trend_long  {stoploss} \n')
+        volume_trend_long_index = i
+    
     h_a = macdhist[i - 1]
     h_b = macdhist[i]
     
@@ -254,6 +273,7 @@ last_signal_index = max([
     bearish_divergence_below_ema21,
     bearish_divergence_below_rsi40,
     bullish_divergence_canceled_ll_index,
+    volume_trend_long_index,
     # ema_4x_above_index,
     # ema_4x_below_index,
     # macd_price_bullish_index
