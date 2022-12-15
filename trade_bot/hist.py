@@ -6,11 +6,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-df = pd.read_csv("Result_2.5 TP.csv", usecols=['win', 'stoploss', 'trade_interval', 'strategy'])
+df = pd.read_csv("Result_TP_4.csv", usecols=['win', 'stoploss', 'trade_interval', 'strategy'])
 
 df = df[df['trade_interval'] == '15m']
+# ['bullish_divergence' 'bullish_divergence_above_ema21'
+#  'bearish_divergence' 'bearish_divergence_below_ema21'
+#  'bearish_divergence_below_rsi40' 'bearish_divergence_1-3']
 # df = df[df['strategy'] == 'bearish_divergence']
-df = df[df['strategy'] == 'bullish_divergence']
+df = df[df['strategy'] == 'bearish_divergence_1-3']
 
 # df2 = df.copy()
 # df = df[df['win'] == 0]
@@ -37,5 +40,5 @@ losses = losses[losses['win'] == 0]
 # plt.xlabel('Stoploss')
 # plt.ylabel('Wins, Loss')
 
-plt.hist([wins['stoploss'], losses['stoploss']], bins=150, label=['win', 'loss'])
+plt.hist([wins['stoploss'], losses['stoploss']], bins=200, label=['win', 'loss'])
 plt.show()

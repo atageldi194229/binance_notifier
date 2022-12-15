@@ -1,3 +1,4 @@
+*.csv
 subscriptions.json
 /subscriptions.json
 ecosystem.config.js

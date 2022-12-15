@@ -325,7 +325,7 @@ for i in range(1, len(macdhist)):
             if mn >= stoploss:
                 close_order(order, lows[i], rows[i][6], 0, -stoploss)
             elif closes[i] < ema21[i]:
-                tp = round(100 - (( order[3] / closes[i] ) * 100), 2)
+                tp = round(100 - (( closes[i] / order[3] ) * 100), 2)
                 close_order(order, closes[i], rows[i][6], 1, tp)
             else:
                 temp_orders.append(order)
@@ -334,7 +334,7 @@ for i in range(1, len(macdhist)):
             if mn >= stoploss:
                 close_order(order, lows[i], rows[i][6], 0, -stoploss)
             elif rsi[i] < 50:
-                tp = round(100 - (( order[3] / closes[i] ) * 100), 2)
+                tp = round(100 - (( closes[i] / order[3] ) * 100), 2)
                 close_order(order, closes[i], rows[i][6], 1, tp)
             else:
                 temp_orders.append(order)
