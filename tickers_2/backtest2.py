@@ -66,16 +66,17 @@ volumes = list(map(float, volumes))
 
 np_closes = np.array(closes)
 # apo = talib.APO(np_closes, fastperiod=8, slowperiod=21)
+ema233 = talib.EMA(np_closes, timeperiod=233)
+ema55 = talib.EMA(np_closes, timeperiod=55)
 ema21 = talib.EMA(np_closes, timeperiod=21)
 ema8 = talib.EMA(np_closes, timeperiod=8)
 
 # sma volumer
-multiplier1 = 2
-multiplier2 = 4
+multiplier = 3
 
 np_volumes = np.array(volumes)
-v1 = talib.SMA(np_closes, timeperiod=20) 
-v9 = (v1 * multiplier2)
+v1 = talib.SMA(np_volumes, timeperiod=20) 
+v9 = v1 * multiplier
 c = np_volumes > v9
 
 rsi = talib.RSI(np_closes, timeperiod=14)
@@ -113,12 +114,20 @@ green_to_red_indexes = []
 red_to_green_indexes = []
 
 for i in range(1, len(closes)):
-    if c[i] and opens[i] > ema8[i] and closes[i] > ema8[i] and opens[i] < closes[i]:
+    # extreme_volume_up
+    if c[i] and closes[i] > ema8[i] and closes[i] > ema233[i] and opens[i] < closes[i]:
         stoploss = round(100 - (( ema21[i] / closes[i] ) * 100), 2)
-        print_date_time(rows[i][0], end=f'   volume_trend_long  {stoploss} \n')
-        create_order("volume_trend_long", 4, stoploss, closes[i], rows[i][6])
-        create_order("volume_trend_long_rsi50_below", 4, stoploss, closes[i], rows[i][6])
-        
+        print_date_time(rows[i][0], end=f'   extreme_volume_up  {stoploss} \n')
+        create_order("extreme_volume_up", 4, stoploss, closes[i], rows[i][6])
+        create_order("extreme_volume_up_rsi45_below", 4, stoploss, closes[i], rows[i][6])
+    
+    # extreme_volume_down
+    if c[i] and closes[i] < ema55[i] and closes[i] < ema233[i] and opens[i] > closes[i]:
+        stoploss = round(100 - ((  closes[i] / ema21[i] ) * 100), 2)
+        print_date_time(rows[i][0], end=f'   extreme_volume_down  {stoploss} \n')
+        create_order("extreme_volume_down", 4, stoploss, closes[i], rows[i][6])
+        create_order("extreme_volume_down_rsi55_above", 4, stoploss, closes[i], rows[i][6])
+    
     
     temp_orders = []
     for order in orders:
@@ -126,7 +135,7 @@ for i in range(1, len(closes)):
         mn = 100 - (lows[i] / entry_price) * 100;
         mx = 100 - (entry_price / highs[i]) * 100;
         
-        if strategy == "volume_trend_long":
+        if strategy == "extreme_volume_up":
             if mn >= stoploss:
                 close_order(order, lows[i], rows[i][6], 0, -stoploss)
             elif closes[i] < ema21[i]:
@@ -135,14 +144,34 @@ for i in range(1, len(closes)):
             else:
                 temp_orders.append(order)
                 
-        if strategy == "volume_trend_long_rsi50_below":
+        if strategy == "extreme_volume_up_rsi45_below":
             if mn >= stoploss:
                 close_order(order, lows[i], rows[i][6], 0, -stoploss)
-            elif rsi[i] < 50:
+            elif rsi[i] < 45:
                 tp = round(100 - (( closes[i] / order[3] ) * 100), 2)
                 close_order(order, closes[i], rows[i][6], 1, tp)
             else:
                 temp_orders.append(order)
+                
+        if strategy == "extreme_volume_down":
+            if mx >= stoploss:
+                close_order(order, highs[i], rows[i][6], 0, -stoploss)
+            elif closes[i] > ema21[i]:
+                tp = round(100 - (( order[3] / closes[i] ) * 100), 2)
+                close_order(order, closes[i], rows[i][6], 1, tp)
+            else:
+                temp_orders.append(order)
+                
+        if strategy == "extreme_volume_down_rsi55_above":
+            if mn >= stoploss:
+                close_order(order, lows[i], rows[i][6], 0, -stoploss)
+            elif rsi[i] > 55:
+                tp = round(100 - (( order[3] / closes[i] ) * 100), 2)
+                close_order(order, closes[i], rows[i][6], 1, tp)
+            else:
+                temp_orders.append(order)
+                
+                
     orders = temp_orders
     
     
