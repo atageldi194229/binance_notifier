@@ -62,7 +62,7 @@ ema8 = talib.EMA(np_closes, timeperiod=8)
 multiplier = 3
 
 np_volumes = np.array(volumes)
-v1 = talib.SMA(np_closes, timeperiod=20) 
+v1 = talib.SMA(np_volumes, timeperiod=20) 
 v9 = v1 * multiplier
 c = np_volumes > v9
 
