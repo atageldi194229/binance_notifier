@@ -115,7 +115,7 @@ red_to_green_indexes = []
 
 for i in range(1, len(closes)):
     # extreme_volume_up
-    if c[i] and closes[i] > ema8[i] and closes[i] > ema233[i] and opens[i] < closes[i]:
+    if c[i] and closes[i] > ema8[i] and closes[i] > ema233[i] and closes[i] > ema21[i] and opens[i] < closes[i]:
         stoploss = round(100 - (( ema21[i] / closes[i] ) * 100), 2)
         print_date_time(rows[i][0], end=f'   extreme_volume_up  {stoploss} \n')
         create_order("extreme_volume_up_tp_2", 2, stoploss, closes[i], rows[i][6])
@@ -123,7 +123,7 @@ for i in range(1, len(closes)):
         create_order("extreme_volume_up_rsi45_below", 4, stoploss, closes[i], rows[i][6])
     
     # extreme_volume_down
-    if c[i] and closes[i] < ema8[i] and closes[i] < ema233[i] and opens[i] > closes[i]:
+    if c[i] and closes[i] < ema8[i] and closes[i] < ema233[i] and closes[i] < ema21[i] and opens[i] > closes[i]:
         stoploss = round(100 - ((  closes[i] / ema21[i] ) * 100), 2)
         print_date_time(rows[i][0], end=f'   extreme_volume_down  {stoploss} \n')
         create_order("extreme_volume_down_tp_2", 2, stoploss, closes[i], rows[i][6])
