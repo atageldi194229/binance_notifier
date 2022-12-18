@@ -128,6 +128,12 @@ for i in range(1, len(macdhist)):
         print_date_time(rows[i][0], end=f'   extreme_volume_up  {stoploss} \n')
         extreme_volume_up_index = i
     
+    if c[i] and closes[i] < ema55[i] and closes[i] < ema233[i] and opens[i] > closes[i]:
+        stoploss = round(100 - (( ema21[i] / closes[i] ) * 100), 2)
+        print_date_time(rows[i][0], end=f'   extreme_volume_down  {stoploss} \n')
+        extreme_volume_down_index = i
+    
+    
     # continue
     h_a = macdhist[i - 1]
     h_b = macdhist[i]
@@ -277,6 +283,7 @@ last_signal_index = max([
     bearish_divergence_below_rsi40,
     bullish_divergence_canceled_ll_index,
     extreme_volume_up_index,
+    extreme_volume_down_index,
     # ema_4x_above_index,
     # ema_4x_below_index,
     # macd_price_bullish_index
