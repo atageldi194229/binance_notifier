@@ -6,24 +6,24 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-df = pd.read_csv("Result_TP_4.csv", usecols=['win', 'stoploss', 'trade_interval', 'strategy'])
+df = pd.read_csv("backtest_data_2.csv", usecols=['win', 'stoploss', 'trade_interval', 'strategy', 'win_percentage'])
 
-df = df[df['trade_interval'] == '15m']
+df = df[df['trade_interval'] == '5m']
 # ['bullish_divergence' 'bullish_divergence_above_ema21'
 #  'bearish_divergence' 'bearish_divergence_below_ema21'
 #  'bearish_divergence_below_rsi40' 'bearish_divergence_1-3']
 # df = df[df['strategy'] == 'bearish_divergence']
-df = df[df['strategy'] == 'bearish_divergence_1-3']
+df = df[df['strategy'] == 'extreme_volume_up']
 
 # df2 = df.copy()
 # df = df[df['win'] == 0]
 
 wins = df.copy()
-wins = wins[wins['win'] == 1]
+wins = wins[wins['win_percentage'] > 0]
 
 
 losses = df.copy()
-losses = losses[losses['win'] == 0]
+losses = losses[losses['win_percentage'] < 0]
 
 # df.hist(column='stoploss', bins=50, by='win')
 
