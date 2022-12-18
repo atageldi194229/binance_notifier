@@ -59,11 +59,11 @@ ema8 = talib.EMA(np_closes, timeperiod=8)
 
 
 # sma volumer
-multiplier = 4
+multiplier = 3
 
 np_volumes = np.array(volumes)
 v1 = talib.SMA(np_closes, timeperiod=20) 
-v9 = (v1 * multiplier)
+v9 = v1 * multiplier
 c = np_volumes > v9
 
 # # check if macdhist is changing colors
