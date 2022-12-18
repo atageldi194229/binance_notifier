@@ -129,7 +129,7 @@ for i in range(1, len(macdhist)):
         extreme_volume_up_index = i
     
     if c[i] and closes[i] < ema55[i] and closes[i] < ema233[i] and opens[i] > closes[i]:
-        stoploss = round(100 - (( ema21[i] / closes[i] ) * 100), 2)
+        stoploss = round(100 - ((  closes[i] / ema21[i] ) * 100), 2)
         print_date_time(rows[i][0], end=f'   extreme_volume_down  {stoploss} \n')
         extreme_volume_down_index = i
     
