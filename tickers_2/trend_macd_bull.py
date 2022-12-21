@@ -15,7 +15,7 @@ result = f'{TRADE_SYMBOL}_{TRADE_INTERVAL}\n'
 
 def custom_print(text, end='\n'):
     global result
-    result = f'{text}{end}'
+    result = f'{TRADE_SYMBOL}_{TRADE_INTERVAL}\n{text}{end}'
     # result = f'{result}{text}{end}'
     
 
