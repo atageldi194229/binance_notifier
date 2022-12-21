@@ -15,7 +15,8 @@ result = f'{TRADE_SYMBOL}_{TRADE_INTERVAL}\n'
 
 def custom_print(text, end='\n'):
     global result
-    result = f'{result}{text}{end}'
+    result = f'{text}{end}'
+    # result = f'{result}{text}{end}'
     
 
 def print_date_time(ms, end = '\n', print_method = custom_print):
@@ -280,11 +281,11 @@ for i in range(1, len(macdhist)):
 last_signal_index = max([
     # trend_up_index,
     # trend_down_index,
-    bearish_divergence_index,
+    # bearish_divergence_index,
     # bullish_divergence_index,
-    bearish_divergence_3_index,
+    # bearish_divergence_3_index,
     # bullish_divergence_ema21_index,
-    bearish_divergence_below_ema21,
+    # bearish_divergence_below_ema21,
     # bearish_divergence_below_rsi40,
     # bullish_divergence_canceled_ll_index,
     extreme_volume_up_index,
