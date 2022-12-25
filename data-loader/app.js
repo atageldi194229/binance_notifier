@@ -191,10 +191,31 @@ const startProcess = async (symbols, interval_in_minutes = 5) => {
 };
 
 (async () => {
-  const symbols = await getUsdtSymbols();
+  let symbols = await getUsdtSymbols();
+
+  let excepts = [
+    "API3USDT",
+    "AUDIOUSDT",
+    "CELOUSDT",
+    "CELRUSDT",
+    "CHRUSDT",
+    "CTSIUSDT",
+    "DEFIUSDT",
+    "DENTUSDT",
+    "EOSUSDT",
+    "FLMUSDT",
+    "LINAUSDT",
+    "LUNA2USDT",
+    "OGNUSDT",
+    "OMGUSDT",
+    "ONTUSDT",
+    "XEMUSDT",
+  ];
+
+  symbols = symbols.filter((e) => !excepts.includes(e.toUpperCase()));
 
   startProcess(symbols, 5);
-  startProcess(symbols, 15);
+  // startProcess(symbols, 15);
 })();
 
 // client.getExchangeInfo().then((data) => {
