@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 class TradeBot:
-    def __init__(self, cash=100, max_position_count = 10) -> None:
+    def __init__(self, cash=100, max_position_count = 5) -> None:
         self.cash = cash
         self.max_position_count = max_position_count
         self.all = []
@@ -120,8 +120,8 @@ def strategy_backtest(df, strategy):
     df['action'] = actions
     df['position_count'] = position_counts
       
-    df.to_csv(f'./result_debug_{strategy}.csv', )
-    pd.DataFrame(bot.all).to_csv(f'./result_{strategy}.csv')
+    # df.to_csv(f'./result_debug_{strategy}.csv', )
+    # pd.DataFrame(bot.all).to_csv(f'./result_{strategy}.csv')
 
     print("For Strategy: ", strategy)
     print("All positions: {}".format(df.shape))
@@ -136,7 +136,7 @@ def strategy_backtest(df, strategy):
 
 def run():
 
-  df = pd.read_csv("backtest_data_2.csv")
+  df = pd.read_csv("backtest_data.csv")
 #   df = pd.read_csv("backtest_data.csv")
   df = df.sort_values(['entry_time', 'trade_symbol'])
 
@@ -146,9 +146,11 @@ def run():
     # Filters
     df2 = df.copy()
     df2 = df2[df2['trade_interval'] == '5m']
+    # df2 = df2[df2['trade_symbol'] in ['AVAXUSDT', 'AAVEUSDT', 'ALGOUSDT', 'ALICEUSDT', 'ANTUSDT', 'APEUSDT', 'BNBUSDT', 'CHZUSDT']]
+    df2 = df2[np.in1d(df2['trade_symbol'], ['AVAXUSDT', 'AAVEUSDT', 'ALGOUSDT', 'ALICEUSDT', 'ANTUSDT', 'APEUSDT', 'BNBUSDT', 'CHZUSDT'])]
     df2 = df2[df2['strategy'] == strategy]
-    df2 = df2[(df2['stoploss'] > -1) & (df2['stoploss'] < 0.1)]
-    #   df = df[(df['entry_time'] > 1617217200000) & (df['entry_time'] < 1619809200000)]
+    df2 = df2[(df2['stoploss'] > 1)]
+    # df = df[(df['entry_time'] > 1617217200000) & (df['entry_time'] < 1619809200000)]
 
     strategy_backtest(df2, strategy)
     
