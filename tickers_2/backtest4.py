@@ -138,7 +138,7 @@ for i in range(1, len(closes)):
             a_max, b_max = max_values[-2], max_values[-1]
             rsi_a_max, rsi_b_max = rsi_max_values[-2], rsi_max_values[-1]
             stoploss = round(100 - (( closes[i] / b_max ) * 100), 2)
-            if a_max < b_max and rsi_a_max > rsi_b_max and ema233[i] > closes[i]:
+            if a_max < b_max and rsi_a_max > rsi_b_max and ema233[i] < closes[i]:
                 bearish_divergence_index = i
                 print_date_time(rows[i][0], end=f'   bearish_divergence  {stoploss}\n')
                 create_order("bearish_divergence", stoploss*3, stoploss, closes[i], rows[i][6])
