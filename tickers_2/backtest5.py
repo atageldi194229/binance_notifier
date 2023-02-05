@@ -103,14 +103,8 @@ rsi = talib.RSI(np_closes, timeperiod=14)
 max_values = []
 min_values = []
 
-rsi_max_values = []
-rsi_min_values = []
-
 last_red_index = 0
 last_green_index = 0
-
-red_to_green_indexes = []
-green_to_red_indexes = []
 
 bearish_divergence_index = -1
 
@@ -122,13 +116,7 @@ volume_trend_long_index = -1
 extreme_volume_up_index = -1
 extreme_volume_down_index = -1
 
-green_to_red_indexes = []
-red_to_green_indexes = []
-
-for i in range(1, len(closes)):
-    h_a = rsi[i - 1]
-    h_b = rsi[i]
-    
+for i in range(2, len(closes)):
     is_seq = ema8[i] > ema21[i] and ema21[i] > ema55[i]
     if c[i] and closes[i] > ema8[i] and closes[i] > ema233[i] and opens[i] < closes[i] and is_seq and len(max_values) > 1 and max_values[-1] < closes[i] and rsi[i - 1] >= 50 and rsi[i] > 50:
         rsi50_low_index = i - 1
@@ -137,87 +125,53 @@ for i in range(1, len(closes)):
         is_under_ema55 = False
         
         for j in range(i - 1, 2, -1):
-            if rsi[j] < 50:
+            if rsi[j - 1] < 50:
                 break
-            if lows[i] < ema21[j]:
+            if lows[j] < ema21[j]:
                 is_under_ema21 = True
-            if lows[i] < ema55[j]:
+            if lows[j] < ema55[j]:
                 is_under_ema55 = True
             
         if not is_under_ema55 and len(orders) == 0:
-            create_order("extremium_trend", stoploss, "ema55" if is_under_ema21 else "ema21", closes[i], rows[i][6])
+            create_order("extremium_trend", ema55[i] if is_under_ema21 else ema21[i], "ema55" if is_under_ema21 else "ema21", closes[i], rows[i][6])
 
 
-    if h_a < 70 and h_b >= 70:
+    if rsi[i - 1] < 70 and rsi[i] >= 70:
         last_red_index = i - 1
-        red_to_green_indexes.append(last_red_index)
-        
-        min_value = min(lows[last_green_index + 1: last_red_index + 1])
+
+        min_value = min(lows[last_green_index: last_red_index + 1])
         min_values.append(min_value)
         
-        # rsi min values
-        rsi_min_value = min(rsi[last_green_index + 1: last_red_index + 1])
-        rsi_min_values.append(rsi_min_value)
+        rsi_min_value = min(rsi[last_green_index: last_red_index + 1])
         
         
-    if h_a > 70 and h_b <= 70:
+    if rsi[i - 1] > 70 and rsi[i] <= 70:
         last_green_index = i - 1
-        green_to_red_indexes.append(last_green_index)
 
-        max_value = max(highs[last_red_index + 1: last_green_index + 1])
+        max_value = max(highs[last_red_index: last_green_index + 1])
         max_values.append(max_value)
         
-        rsi_max_value = max(rsi[last_red_index + 1: last_green_index + 1])
-        rsi_max_values.append(rsi_max_value)
+        rsi_max_value = max(rsi[last_red_index: last_green_index + 1])
+
         
     temp_orders = []
     for order in orders:
-        [strategy, takeprofit, stoploss, entry_price, entry_time] = order
+        [strategy, stoploss, ema_type, entry_price, entry_time] = order
         mn = 100 - (lows[i] / entry_price) * 100
         mx = 100 - (entry_price / highs[i]) * 100
         
         pnl = 100 - (entry_price / closes[i]) * 100
         
         if strategy == "extremium_trend":
-            if (stoploss == "ema21" and lows[i] < ema21[i]) or (stoploss == "ema55" and lows[i] < ema55[i]):
+            if closes[i] < stoploss:
+                close_order(order, lows[i], rows[i][6], 0 if pnl < 0 else 1, pnl)
+
+            if (ema_type == "ema21" and lows[i] < ema21[i]) or (ema_type == "ema55" and lows[i] < ema55[i]):
                 close_order(order, lows[i], rows[i][6], 0 if pnl < 0 else 1, pnl)
 
             if rsi[i] < 45:
                 close_order(order, closes[i], rows[i][6], 0 if pnl < 0 else 1, pnl)
-        
-        # if strategy in ["bearish_divergence", "bearish_divergence_1-3", "bearish_divergence_below_ema21", "bearish_divergence_below_rsi40"]:
-        #     if mx >= stoploss:
-        #         close_order(order, highs[i], rows[i][6], 0, -stoploss)
-        #     elif mn >= takeprofit:
-        #         close_order(order, lows[i], rows[i][6], 1, takeprofit)
-        #     else:
-        #         temp_orders.append(order)
 
-        # if strategy in ["bullish_divergence", "bullish_divergence_above_ema21"]:
-        #     if mn >= stoploss:
-        #         close_order(order, lows[i], rows[i][6], 0, -stoploss)
-        #     elif mx >= takeprofit:
-        #         close_order(order, highs[i], rows[i][6], 1, takeprofit)
-        #     else:
-        #         temp_orders.append(order)
-        
-        # if strategy == "volume_trend_long":
-        #     if mn >= stoploss:
-        #         close_order(order, lows[i], rows[i][6], 0, -stoploss)
-        #     elif closes[i] < ema21[i]:
-        #         tp = round(100 - (( closes[i] / order[3] ) * 100), 2)
-        #         close_order(order, closes[i], rows[i][6], 1, tp)
-        #     else:
-        #         temp_orders.append(order)
-                
-        # if strategy == "volume_trend_long_rsi50_below":
-        #     if mn >= stoploss:
-        #         close_order(order, lows[i], rows[i][6], 0, -stoploss)
-        #     elif rsi[i] < 50:
-        #         tp = round(100 - (( closes[i] / order[3] ) * 100), 2)
-        #         close_order(order, closes[i], rows[i][6], 1, tp)
-        #     else:
-        #         temp_orders.append(order)
     orders = temp_orders
 
 
