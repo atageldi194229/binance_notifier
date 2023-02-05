@@ -129,7 +129,7 @@ for i in range(1, len(closes)):
     h_a = rsi[i - 1]
     h_b = rsi[i]
     
-    is_seq = ema8[i] > ema21[i] and ema21[i] > ema55[i] and ema55[i] > ema233[i]
+    is_seq = ema8[i] > ema21[i] and ema21[i] > ema55[i]
     if c[i] and closes[i] > ema8[i] and closes[i] > ema233[i] and opens[i] < closes[i] and is_seq and len(max_values) > 1 and max_values[-1] < closes[i] and rsi[i - 1] >= 50 and rsi[i] > 50:
         rsi50_low_index = i - 1
         
