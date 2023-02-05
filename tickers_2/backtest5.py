@@ -79,8 +79,6 @@ volumes = list(map(float, volumes))
 
 
 np_closes = np.array(closes)
-macd, macdsignal, macdhist = talib.MACD(np_closes, fastperiod=12, slowperiod=26, signalperiod=9)
-# apo = talib.APO(np_closes, fastperiod=8, slowperiod=21)
 ema233 = talib.EMA(np_closes, timeperiod=233)
 ema55 = talib.EMA(np_closes, timeperiod=55)
 ema21 = talib.EMA(np_closes, timeperiod=21)
@@ -98,8 +96,6 @@ c = np_volumes > v9
 
 rsi = talib.RSI(np_closes, timeperiod=14)
 
-# print(len(closes), len(macdhist))
-
 max_values = []
 min_values = []
 
@@ -108,29 +104,17 @@ last_green_index = 0
 
 bearish_divergence_index = -1
 
-# signal_index = -1
-stoploss = 0
-
-
-volume_trend_long_index = -1
-extreme_volume_up_index = -1
-extreme_volume_down_index = -1
-
 for i in range(2, len(closes)):
 
     temp_orders = []
     for order in orders:
         [strategy, stoploss, ema_type, entry_price, entry_time] = order
-        mn = 100 - (lows[i] / entry_price) * 100
-        mx = 100 - (entry_price / highs[i]) * 100
-        
         pnl = 100 - (entry_price / closes[i]) * 100
         
         if strategy == "extremium_trend":
             if closes[i] < stoploss:
                 close_order(order, lows[i], rows[i][6], 0 if pnl < 0 else 1, pnl)
-
-            if (ema_type == "ema21" and lows[i] < ema21[i]) or (ema_type == "ema55" and lows[i] < ema55[i]):
+            elif (ema_type == "ema21" and lows[i] < ema21[i]) or (ema_type == "ema55" and lows[i] < ema55[i]):
                 close_order(order, lows[i], rows[i][6], 0 if pnl < 0 else 1, pnl)
 
             # if rsi[i] < 45:
@@ -143,7 +127,7 @@ for i in range(2, len(closes)):
     
 
     is_seq = ema8[i] > ema21[i] and ema21[i] > ema55[i]
-    if c[i] and closes[i] > ema8[i] and closes[i] > ema233[i] and opens[i] < closes[i] and is_seq and len(max_values) > 1 and max_values[-1] < closes[i] and rsi[i - 1] >= 50 and rsi[i] > 50:
+    if c[i] and closes[i] > ema233[i] and opens[i] < closes[i] and is_seq and len(max_values) >= 1 and max_values[-1] < closes[i] and rsi[i - 1] >= 50 and rsi[i] > 50:
         rsi50_low_index = i - 1
         
         is_under_ema21 = False
