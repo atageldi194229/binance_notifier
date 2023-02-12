@@ -77,7 +77,7 @@ last_green_index = 0
 
 df["max values"] = rsi
 for i in range(1, len(df)):
-    df.set_value(i,'max values', max_values[-1])
+    df.at[i, 'max values'] = max_values[-1]
 
     if rsi[i - 1] < 70 and rsi[i] >= 70:
         last_red_index = i - 1
