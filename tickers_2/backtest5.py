@@ -140,19 +140,12 @@ for i in range(2, len(closes)):
         min_value = min(lows[last_green_index: last_red_index + 1])
         min_values.append(min_value)
         
-        rsi_min_value = min(rsi[last_green_index: last_red_index + 1])
-        
         
     if rsi[i - 1] > 70 and rsi[i] <= 70:
         last_green_index = i - 1
 
         max_value = max(highs[last_red_index: last_green_index + 1])
         max_values.append(max_value)
-        
-        rsi_max_value = max(rsi[last_red_index: last_green_index + 1])
-
-        
-    
 
 
 
