@@ -47,7 +47,7 @@ df["Close time text"] = close_times_string
 multiplier = 3
 v1 = talib.SMA(volumes, timeperiod=20) 
 v9 = v1 * multiplier
-c = volumes > v9
+df["extremium"] = volumes > v9
 
 # ema init
 ema233 = talib.EMA(closes, timeperiod=233)
@@ -59,10 +59,10 @@ ema8 = talib.EMA(closes, timeperiod=8)
 rsi = talib.RSI(closes, timeperiod=14)
 df["rsi"] = rsi
 
-# df["ema233"] = ema233
-# df["ema55"] = ema55
-# df["ema21"] = ema21
-# df["ema8"] = ema8
+df["ema233"] = ema233
+df["ema55"] = ema55
+df["ema21"] = ema21
+df["ema8"] = ema8
 
 
 # ######################
@@ -89,9 +89,11 @@ for i in range(1, len(df)):
         max_value = max(highs[last_red_index: last_green_index + 1])
         max_values.append(max_value)
 
-df["is close greater from last max"] = df["max values"] < df["Close"]
 
-# df = df[(df["ema8"] > df["ema21"]) & (df["ema21"] > df["ema55"]) & (df["Close"] > df["ema233"])]
+
+df["accessible"] = df["max values"] < df["Close"]
+df["accessible"] = df["extremium"] and df["accessible"] and df["ema8"] > df["ema21"] and df["ema21"] > df["ema55"] and df["Close"] > df["ema233"]
+
 df = df[df["Close time"] > 1670800799999]
 
 # save to csv file
