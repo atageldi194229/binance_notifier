@@ -51,17 +51,7 @@ def print_date_time(ms, end = '\n', print_method = custom_print):
     s = ms / 1000.0
     print_method(datetime.datetime.fromtimestamp(s).strftime('%Y-%m-%d %H:%M:%S'), end=end)
 
-def isCandleAboveEMA(ema, op, cl):
-    return ema < op and ema < cl
-
-def isEMA4Down(ema233, ema55, ema21, ema8):
-    return ema233 >= ema55 and ema55 >= ema21 and ema21 >= ema8
-
-def isEMA4Up(ema233, ema55, ema21, ema8):
-    return ema233 <= ema55 and ema55 <= ema21 and ema21 <= ema8
-
-
-# read json file and calculate
+# read json file and data initialization
 with open(FILE_PATH_5M) as json_file:
     data_5m = json.load(json_file)
 
@@ -77,7 +67,7 @@ lows = list(map(float, lows))
 volumes = np.array(rows)[:,5]
 volumes = list(map(float, volumes))
 
-
+# ema init
 np_closes = np.array(closes)
 ema233 = talib.EMA(np_closes, timeperiod=233)
 ema55 = talib.EMA(np_closes, timeperiod=55)
@@ -87,7 +77,6 @@ ema8 = talib.EMA(np_closes, timeperiod=8)
 
 # sma volumer
 multiplier = 3
-
 np_volumes = np.array(volumes)
 v1 = talib.SMA(np_volumes, timeperiod=20) 
 v9 = v1 * multiplier
