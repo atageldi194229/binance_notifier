@@ -33,6 +33,11 @@ lows = df["Low"].astype('float64').values
 highs = df["High"].astype('float64').values
 volumes = df["Volume"].astype('float64').values
 
+df["Close"] = closes
+df["Low"] = lows
+df["High"] = highs
+df["Volume"] = volumes
+
 f = lambda ms: datetime.datetime.fromtimestamp(ms / 1000).strftime('%Y-%m-%d %H:%M:%S')
 close_times_string = np.vectorize(f)(df["Close time"].values)
 
