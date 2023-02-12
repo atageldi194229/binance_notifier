@@ -11,7 +11,7 @@ import datetime
 # OUTPUT_FILE = sys.argv[2]
 
 
-FILE_PATH_5M = sys.argv[1] # 5 minute interval kline's file path
+FILE_PATH = sys.argv[1] # 5 minute interval kline's file path
 TRADE_SYMBOL = sys.argv[2]
 TRADE_INTERVAL = sys.argv[3]
 DIR = sys.argv[4]
