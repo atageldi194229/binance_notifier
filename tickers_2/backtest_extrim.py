@@ -6,9 +6,43 @@ import bot
 import pandas as pd
 import datetime
 
+# # ARGS
+# FILE_PATH = sys.argv[1]
+# OUTPUT_FILE = sys.argv[2]
 
-FILE_PATH = sys.argv[1]
-OUTPUT_FILE = sys.argv[2]
+
+FILE_PATH_5M = sys.argv[1] # 5 minute interval kline's file path
+TRADE_SYMBOL = sys.argv[2]
+TRADE_INTERVAL = sys.argv[3]
+DIR = sys.argv[4]
+
+# [[strategy, takeprofit, stoploss, entry_price, entry_time, close_price, close_time, win]]
+orders = [];
+closed_orders = [];
+
+
+def create_order(strategy, takeprofit, stoploss, entry_price, entry_time): 
+    orders.append([strategy, takeprofit, stoploss, entry_price, entry_time]);
+
+def close_order(order, close_price, close_time, win, win_percentage):
+    [strategy, takeprofit, stoploss, entry_price, entry_time] = order
+    # closed_orders.append([strategy, takeprofit, stoploss, entry_price, entry_time, close_price, close_time, win, win_percentage])
+    closed_orders.append({
+        "trade_symbol": TRADE_SYMBOL, 
+        "trade_interval": TRADE_INTERVAL,
+        "strategy": strategy, 
+        "takeprofit": takeprofit, 
+        "stoploss": stoploss, 
+        "entry_price": entry_price, 
+        "entry_time": entry_time, 
+        "close_price": close_price, 
+        "close_time": close_time, 
+        "win": win, 
+        "win_percentage": win_percentage
+        })
+
+
+
 
 # read json file and data initialization
 with open(FILE_PATH) as json_file:
@@ -99,6 +133,35 @@ df["accessible"] = df["accessible"] & df["Close"] > df["ema233"]
 
 df = df[df["Close time"] > 1670800799999]
 
-# save to csv file
-df.to_csv(OUTPUT_FILE)
+for i in range(1, len(df)):
+    temp_orders = []
+    for order in orders:
+        [strategy, stoploss, ema_type, entry_price, entry_time] = order
+        pnl = 100 - (entry_price / closes[i]) * 100
+        
+        if strategy == "extremium_trend":
+            if closes[i] < stoploss:
+                close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
+            elif (ema_type == "ema21" and lows[i] < ema21[i]) or (ema_type == "ema55" and lows[i] < ema55[i]):
+                close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
 
+    orders = temp_orders
+
+    if df["accessible"].iloc[i] and len(orders) == 0:
+        is_under_ema21 = False
+        is_under_ema55 = False
+
+        for j in range(i - 1, 2, -1):
+            if rsi[j - 1] < 50:
+                break
+            if lows[j] < ema21[j]:
+                is_under_ema21 = True
+            if lows[j] < ema55[j]:
+                is_under_ema55 = True
+
+        create_order("extremium_trend", ema55[i] if is_under_ema21 else ema21[i], "ema55" if is_under_ema21 else "ema21", closes[i], df["Close time text"].iloc[i])
+
+
+log_file_name = f"{DIR}/{TRADE_SYMBOL}_{TRADE_INTERVAL}_orders.json"
+with open(log_file_name, "w") as outfile:
+    json.dump(closed_orders, outfile)

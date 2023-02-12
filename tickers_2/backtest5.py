@@ -17,7 +17,6 @@ result = f'{TRADE_SYMBOL}_{TRADE_INTERVAL}\n'
 takeprofit = 4
 
 # [[strategy, takeprofit, stoploss, entry_price, entry_time, close_price, close_time, win]]
-
 orders = [];
 closed_orders = [];
 
