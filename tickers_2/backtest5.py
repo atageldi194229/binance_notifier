@@ -131,7 +131,7 @@ df["accessible"] = df["accessible"] & df["ema8"] > df["ema21"]
 df["accessible"] = df["accessible"] & df["ema21"] > df["ema55"] 
 df["accessible"] = df["accessible"] & df["Close"] > df["ema233"]
 
-df = df[df["Close time"] > 1670800799999]
+# df = df[df["Close time"] > 1670800799999]
 
 for i in range(1, len(df)):
     temp_orders = []
