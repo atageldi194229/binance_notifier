@@ -92,10 +92,10 @@ for i in range(1, len(df)):
 
 
 df["accessible"] = df["max values"] < df["Close"]
-df["accessible"] = df["extremium"] and df["accessible"]
-df["accessible"] = df["accessible"] and df["ema8"] > df["ema21"] 
-df["accessible"] = df["accessible"] and df["ema21"] > df["ema55"] 
-df["accessible"] = df["accessible"] and df["Close"] > df["ema233"]
+df["accessible"] = df["extremium"] & df["accessible"]
+df["accessible"] = df["accessible"] & df["ema8"] > df["ema21"] 
+df["accessible"] = df["accessible"] & df["ema21"] > df["ema55"] 
+df["accessible"] = df["accessible"] & df["Close"] > df["ema233"]
 
 df = df[df["Close time"] > 1670800799999]
 
