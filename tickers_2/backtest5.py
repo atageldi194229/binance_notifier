@@ -144,6 +144,8 @@ for i in range(1, len(df)):
                 close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
             elif (ema_type == "ema21" and lows[i] < ema21[i]) or (ema_type == "ema55" and lows[i] < ema55[i]):
                 close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
+            else:
+                temp_orders.append(order)
 
     orders = temp_orders
 
