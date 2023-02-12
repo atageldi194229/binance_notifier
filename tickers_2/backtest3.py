@@ -78,7 +78,6 @@ lows_5m = df["Low"].astype('float64').values
 highs_5m = df["High"].astype('float64').values
 
 f = lambda ms: datetime.datetime.fromtimestamp(ms / 1000).strftime('%Y-%m-%d %H:%M:%S')
-# close_times_5m = f(df["Close time"].astype(int).values)
 close_times_5m = np.vectorize(f)(df["Close time"].values)
 
 

@@ -20,6 +20,7 @@ df = pd.DataFrame(data, columns=["Open time",
                                  "Taker buy quote asset volume", 
                                  "Ignore"])
 
-df.pct_change(1, "Close")
+for i in range(1, len(df)):
+    df.loc[i, 'Change'] = ( df.loc[i, 'Close'] - df.loc[i - 1, 'Close'] ) / 100
 
 df.to_csv("./btc.csv")
