@@ -21,7 +21,7 @@ const taskManager = new TaskManager(3, () => {
 getUsdtSymbols()
   .then((symbols) => {
     console.log(symbols);
-    symbols = ["AVAXUSDT"];
+    symbols = ["SKLUSDT"];
     for (let symbol of symbols) {
       taskManager.addTask(() => load_symbol_history(symbol, "5m"));
       // taskManager.addTask(() => load_symbol_history(symbol, "15m"));
