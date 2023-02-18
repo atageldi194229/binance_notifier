@@ -138,11 +138,12 @@ for i in range(1, len(df)):
     for order in orders:
         [strategy, stoploss, ema_type, entry_price, entry_time] = order
         pnl = 100 - (entry_price / closes[i]) * 100
-        
+        order[1] = 100 - (stoploss / entry_price) * 100
+
         if strategy == "extremium_trend":
-            if pnl > 2:
-                close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
-            elif closes[i] < stoploss:
+            # if pnl > 2:
+                # close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
+            if closes[i] < stoploss:
                 close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
             elif (ema_type == "ema21" and lows[i] < ema21[i]) or (ema_type == "ema55" and lows[i] < ema55[i]):
                 close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
