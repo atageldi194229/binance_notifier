@@ -78,7 +78,7 @@ close_times_string = np.vectorize(f)(df["Close time"].values)
 df["Close time text"] = close_times_string
 
 # sma volumer
-multiplier = 3
+multiplier = 2
 v1 = talib.SMA(volumes, timeperiod=20) 
 v9 = v1 * multiplier
 df["extremium"] = volumes > v9
