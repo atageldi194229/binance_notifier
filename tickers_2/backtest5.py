@@ -15,6 +15,8 @@ FILE_PATH = sys.argv[1] # 5 minute interval kline's file path
 TRADE_SYMBOL = sys.argv[2]
 TRADE_INTERVAL = sys.argv[3]
 DIR = sys.argv[4]
+BTC_FILE_PATH = sys.argv[5]
+
 
 # [[strategy, takeprofit, stoploss, entry_price, entry_time, close_price, close_time, win]]
 orders = [];
@@ -48,19 +50,26 @@ def close_order(order, close_price, close_time, win, win_percentage):
 with open(FILE_PATH) as json_file:
     data = json.load(json_file)
 
-df = pd.DataFrame(data, columns=["Open time",
-                                 "Open", 
-                                 "High", 
-                                 "Low", 
-                                 "Close", 
-                                 "Volume", 
-                                 "Close time", 
-                                 "Quote asset volume", 
-                                 "Number of trades", 
-                                 "Taker buy base asset volume", 
-                                 "Taker buy quote asset volume", 
-                                 "Ignore"])
+with open(BTC_FILE_PATH) as json_file:
+    btc_data = json.load(json_file)
 
+KLINE_COLUMNS = ["Open time",
+                "Open", 
+                "High", 
+                "Low", 
+                "Close", 
+                "Volume", 
+                "Close time", 
+                "Quote asset volume", 
+                "Number of trades", 
+                "Taker buy base asset volume", 
+                "Taker buy quote asset volume", 
+                "Ignore"]
+
+df = pd.DataFrame(data, columns=KLINE_COLUMNS)
+btc_df = pd.DataFrame(btc_data, columns=KLINE_COLUMNS)
+
+btc_df["Close"] = btc_df["Close"].astype('float64').values
 
 closes = df["Close"].astype('float64').values
 lows = df["Low"].astype('float64').values
@@ -88,6 +97,12 @@ ema233 = talib.EMA(closes, timeperiod=233)
 ema55 = talib.EMA(closes, timeperiod=55)
 ema21 = talib.EMA(closes, timeperiod=21)
 ema8 = talib.EMA(closes, timeperiod=8)
+
+# btc emas
+btc_df["ema233"] = talib.EMA(btc_df["Close"], timeperiod=233)
+btc_df["ema55"] = talib.EMA(btc_df["Close"], timeperiod=55)
+btc_df["ema21"] = talib.EMA(btc_df["Close"], timeperiod=21)
+btc_df["ema8"] = talib.EMA(btc_df["Close"], timeperiod=8)
 
 # rsi
 rsi = talib.RSI(closes, timeperiod=14)
@@ -133,12 +148,12 @@ df["accessible"] = df["accessible"] & df["Close"] > df["ema233"]
 
 # df = df[df["Close time"] > 1670800799999]
 
+btc_i = 0
 for i in range(1, len(df)):
     temp_orders = []
     for order in orders:
         [strategy, stoploss, ema_type, entry_price, entry_time] = order
         pnl = 100 - (entry_price / closes[i]) * 100
-        order[1] = 100 - (stoploss / entry_price) * 100
 
         if strategy == "extremium_trend":
             # if pnl > 2:
@@ -152,7 +167,12 @@ for i in range(1, len(df)):
 
     orders = temp_orders
 
-    if df["accessible"].iloc[i] and len(orders) == 0:
+    while btc_df["Close time"].iloc[btc_i] < df["Close time"].iloc[i]:
+        btc_i += 1
+
+
+    btc_condition = btc_df["ema8"] > btc_df["ema21"] and btc_df["ema21"] > btc_df["ema55"] and btc_df["Close"] > btc_df["ema233"]
+    if df["accessible"].iloc[i] and len(orders) == 0 and btc_condition:
         is_under_ema21 = False
         is_under_ema55 = False
 
