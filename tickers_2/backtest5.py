@@ -108,6 +108,10 @@ btc_df["ema8"] = talib.EMA(btc_df["Close"], timeperiod=8)
 rsi = talib.RSI(closes, timeperiod=14)
 df["rsi"] = rsi
 
+# STOCHRSI
+fastd = talib.STOCHRSI(closes)
+df["fastd"] = fastd
+
 df["ema233"] = ema233
 df["ema55"] = ema55
 df["ema21"] = ema21
@@ -158,7 +162,11 @@ for i in range(1, len(df)):
         if strategy == "extremium_trend":
             # if pnl > 2:
                 # close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
+            
             if closes[i] < stoploss:
+                close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
+            elif fastd[i - 1] > 80 and fastd[i] <= 80:
+                order[2]="stoch"
                 close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
             elif (ema_type == "ema21" and lows[i] < ema21[i]) or (ema_type == "ema55" and lows[i] < ema55[i]):
                 close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
@@ -172,7 +180,7 @@ for i in range(1, len(df)):
 
 
     btc_condition = btc_df["ema8"].iloc[btc_i] > btc_df["ema21"].iloc[btc_i] and btc_df["ema21"].iloc[btc_i] > btc_df["ema55"].iloc[btc_i] and btc_df["Close"].iloc[btc_i] > btc_df["ema233"].iloc[btc_i]
-    if df["accessible"].iloc[i] and len(orders) == 0 and btc_condition:
+    if df["accessible"].iloc[i] and len(orders) == 0: # and btc_condition:
         is_under_ema21 = False
         is_under_ema55 = False
 
