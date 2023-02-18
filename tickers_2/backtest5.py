@@ -109,8 +109,7 @@ rsi = talib.RSI(closes, timeperiod=14)
 df["rsi"] = rsi
 
 # STOCHRSI
-fastd = talib.STOCHRSI(closes)
-df["fastd"] = fastd
+fastk, fastd = talib.STOCHRSI(closes)
 
 df["ema233"] = ema233
 df["ema55"] = ema55
