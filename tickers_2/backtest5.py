@@ -158,9 +158,9 @@ for i in range(1, len(df)):
         for j in range(i - 1, 2, -1):
             if rsi[j - 1] < 50:
                 break
-            if lows[j] < ema21[j]:
+            if closes[j] < ema21[j]:
                 is_under_ema21 = True
-            if lows[j] < ema55[j]:
+            if closes[j] < ema55[j]:
                 is_under_ema55 = True
 
         create_order("extremium_trend", ema55[i] if is_under_ema21 else ema21[i], "ema55" if is_under_ema21 else "ema21", closes[i], df["Close time text"].iloc[i])
