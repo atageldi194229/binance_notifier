@@ -171,7 +171,7 @@ for i in range(1, len(df)):
         btc_i += 1
 
 
-    btc_condition = btc_df["ema8"] > btc_df["ema21"] and btc_df["ema21"] > btc_df["ema55"] and btc_df["Close"] > btc_df["ema233"]
+    btc_condition = btc_df["ema8"].iloc[btc_i] > btc_df["ema21"].iloc[btc_i] and btc_df["ema21"].iloc[btc_i] > btc_df["ema55"].iloc[btc_i] and btc_df["Close"].iloc[btc_i] > btc_df["ema233"].iloc[btc_i]
     if df["accessible"].iloc[i] and len(orders) == 0 and btc_condition:
         is_under_ema21 = False
         is_under_ema55 = False
