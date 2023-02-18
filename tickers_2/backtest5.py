@@ -151,8 +151,27 @@ df["accessible"] = df["accessible"] & df["Close"] > df["ema233"]
 
 # df = df[df["Close time"] > 1670800799999]
 
+# init
+max_values = [0,0]
+max_rsi_values = [0,0]
 btc_i = 0
+last_open = 0
+
+# loop
 for i in range(1, len(df)):
+    # data collector for bearish divergence
+    if fastd[i - 1] < 80 and fastd[i] >= 80:
+        last_open = i
+    if fastd[i - 1] > 80 and fastd[i] <= 80:
+        max_values.append( max(highs[last_open: i + 1]) )
+        max_rsi_values.append( max(fastd[last_open: i + 1]) )
+
+    # bearish divergence finder
+    is_bearish_divergence = max_values[-2] < max_values[-1] and max_rsi_values[-2] > max_rsi_values[-1]
+
+
+    # ##################
+    # order closer
     temp_orders = []
     for order in orders:
         [strategy, stoploss, ema_type, entry_price, entry_time] = order
@@ -164,25 +183,32 @@ for i in range(1, len(df)):
             
             if closes[i] < stoploss:
                 close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
-            elif fastd[i - 1] > 80 and fastd[i] <= 80:
-                order[2]="stoch"
+            elif fastd[i - 1] > 80 and fastd[i] <= 80 and is_bearish_divergence:
+                order[2]="bear_div"
                 close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
             elif (ema_type == "ema21" and lows[i] < ema21[i]) or (ema_type == "ema55" and lows[i] < ema55[i]):
                 close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
             else:
                 temp_orders.append(order)
-
     orders = temp_orders
+    # 2order closer end
+    # ##################
 
+
+
+    # btc counter
     while btc_df["Close time"].iloc[btc_i] < df["Close time"].iloc[i]:
         btc_i += 1
 
 
+
+    # order opener
     btc_condition = btc_df["ema8"].iloc[btc_i] > btc_df["ema21"].iloc[btc_i] and btc_df["ema21"].iloc[btc_i] > btc_df["ema55"].iloc[btc_i] and btc_df["Close"].iloc[btc_i] > btc_df["ema233"].iloc[btc_i]
     if df["accessible"].iloc[i] and len(orders) == 0: # and btc_condition:
         is_under_ema21 = False
         is_under_ema55 = False
 
+        # under in which ema
         for j in range(i - 1, 2, -1):
             if rsi[j - 1] < 50:
                 break
@@ -194,6 +220,7 @@ for i in range(1, len(df)):
         create_order("extremium_trend", ema55[i] if is_under_ema21 else ema21[i], "ema55" if is_under_ema21 else "ema21", closes[i], df["Close time text"].iloc[i])
 
 
+# save result as json file
 log_file_name = f"{DIR}/{TRADE_SYMBOL}_{TRADE_INTERVAL}_orders.json"
 with open(log_file_name, "w") as outfile:
     json.dump(closed_orders, outfile)
