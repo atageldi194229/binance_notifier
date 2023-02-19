@@ -144,12 +144,13 @@ for i in range(1, len(df)):
 
 
 df["accessible"] = df["max values"] < df["Close"]
-df["accessible"] = df["extremium"] & df["accessible"]
-df["accessible"] = df["accessible"] & df["ema8"] > df["ema21"] 
-df["accessible"] = df["accessible"] & df["ema21"] > df["ema55"] 
-df["accessible"] = df["accessible"] & df["Close"] > df["ema233"]
+# df["accessible"] = df["accessible"] & df["extremium"]
+# df["accessible"] = df["accessible"] & df["ema8"] > df["ema21"] 
+# df["accessible"] = df["accessible"] & df["ema21"] > df["ema55"] 
+# df["accessible"] = df["accessible"] & df["Close"] > df["ema233"]
 
 # df = df[df["Close time"] > 1670800799999]
+
 
 # init
 max_values = [0,0]
@@ -204,7 +205,8 @@ for i in range(1, len(df)):
 
     # order opener
     # btc_condition = btc_df["ema8"].iloc[btc_i] > btc_df["ema21"].iloc[btc_i] and btc_df["ema21"].iloc[btc_i] > btc_df["ema55"].iloc[btc_i] and btc_df["Close"].iloc[btc_i] > btc_df["ema233"].iloc[btc_i]
-    if df["accessible"].iloc[i] and len(orders) == 0: # and btc_condition:
+    cond = df["accessible"].iloc[i] and df["extremium"].iloc[i] and df["ema8"].iloc[i] > df["ema21"].iloc[i] and df["ema21"].iloc[i] > df["ema55"].iloc[i] and df["Close"].iloc[i] > df["ema233"].iloc[i]
+    if cond and len(orders) == 0: # and btc_condition: # df["accessible"].iloc[i]
         is_under_ema21 = False
         is_under_ema55 = False
 
