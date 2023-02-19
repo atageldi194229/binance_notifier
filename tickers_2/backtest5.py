@@ -71,11 +71,13 @@ df = pd.DataFrame(data, columns=KLINE_COLUMNS)
 
 # btc_df["Close"] = btc_df["Close"].astype('float64').values
 
+opens = df["Open"].astype('float64').values
 closes = df["Close"].astype('float64').values
 lows = df["Low"].astype('float64').values
 highs = df["High"].astype('float64').values
 volumes = df["Volume"].astype('float64').values
 
+df["Open"] = opens
 df["Close"] = closes
 df["Low"] = lows
 df["High"] = highs
@@ -206,7 +208,7 @@ for i in range(1, len(df)):
     # order opener
     # btc_condition = btc_df["ema8"].iloc[btc_i] > btc_df["ema21"].iloc[btc_i] and btc_df["ema21"].iloc[btc_i] > btc_df["ema55"].iloc[btc_i] and btc_df["Close"].iloc[btc_i] > btc_df["ema233"].iloc[btc_i]
     cond = df["accessible"].iloc[i] and df["extremium"].iloc[i] and df["ema8"].iloc[i] > df["ema21"].iloc[i] and df["ema21"].iloc[i] > df["ema55"].iloc[i] and df["Close"].iloc[i] > df["ema233"].iloc[i]
-    if cond and len(orders) == 0: # and btc_condition: # df["accessible"].iloc[i]
+    if opens[i] < closes[i] and cond and len(orders) == 0: # and btc_condition: # df["accessible"].iloc[i]
         is_under_ema21 = False
         is_under_ema55 = False
 
