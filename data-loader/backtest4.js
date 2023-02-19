@@ -14,7 +14,7 @@ const run_backtest = (file, symbol, interval) => {
       symbol,
       interval,
       path.join(__dirname, "backtest"),
-      path.join(__dirname, "history/BTCUSDT_30m.json"),
+      // path.join(__dirname, "history/BTCUSDT_30m.json"),
     ]);
 
     pyprog.stdout.on("data", (data) => console.log(data.toString()));

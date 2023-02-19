@@ -23,8 +23,8 @@ getUsdtSymbols()
     console.log(symbols);
     // symbols = ["BTCUSDT"];
     for (let symbol of symbols) {
-      // taskManager.addTask(() => load_symbol_history(symbol, "5m"));
-      taskManager.addTask(() => load_symbol_history(symbol, "30m"));
+      taskManager.addTask(() => load_symbol_history(symbol, "5m"));
+      // taskManager.addTask(() => load_symbol_history(symbol, "30m"));
       // taskManager.addTask(() => load_symbol_history(symbol, "1h"));
     }
   })
