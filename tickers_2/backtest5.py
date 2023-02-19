@@ -179,12 +179,14 @@ for i in range(1, len(df)):
     for order in orders:
         [strategy, stoploss, ema_type, entry_price, entry_time] = order
         pnl = 100 - (entry_price / closes[i]) * 100
+        pnl2 = 100 - (entry_price / highs[i]) * 100
 
         if strategy == "extremium_trend":
             # if pnl > 2:
                 # close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
-            
-            if closes[i] < stoploss:
+            if pnl2 > 1:
+                close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, 1)
+            elif closes[i] < stoploss:
                 close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
             elif fastd[i - 1] > 80 and fastd[i] <= 80 and is_bearish_divergence:
                 order[2]="bear_div"
