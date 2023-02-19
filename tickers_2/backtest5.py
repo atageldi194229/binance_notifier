@@ -50,8 +50,8 @@ def close_order(order, close_price, close_time, win, win_percentage):
 with open(FILE_PATH) as json_file:
     data = json.load(json_file)
 
-with open(BTC_FILE_PATH) as json_file:
-    btc_data = json.load(json_file)
+# with open(BTC_FILE_PATH) as json_file:
+#     btc_data = json.load(json_file)
 
 KLINE_COLUMNS = ["Open time",
                 "Open", 
