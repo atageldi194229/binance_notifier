@@ -212,7 +212,7 @@ for i in range(1, len(df)):
     cond = df["accessible"].iloc[i] and df["extremium"].iloc[i] and df["ema8"].iloc[i] > df["ema21"].iloc[i] and df["ema21"].iloc[i] > df["ema55"].iloc[i] and df["Close"].iloc[i] > df["ema233"].iloc[i]
     if opens[i] < closes[i] and cond and len(orders) == 0: # and btc_condition: # df["accessible"].iloc[i]
         is_under_ema21 = False
-        is_under_ema55 = False
+        is_under_ema8 = False
 
         # under in which ema
         for j in range(i - 1, 2, -1):
@@ -220,10 +220,11 @@ for i in range(1, len(df)):
                 break
             if closes[j] < ema21[j]:
                 is_under_ema21 = True
-            if closes[j] < ema55[j]:
-                is_under_ema55 = True
+            if closes[j] < ema8[j]:
+                is_under_ema8 = True
 
-        create_order("extremium_trend", ema55[i] if is_under_ema21 else ema21[i], "ema55" if is_under_ema21 else "ema21", closes[i], df["Close time text"].iloc[i])
+        # create_order("extremium_trend", ema21[i] if is_under_ema8 else ema8[i], "ema21" if is_under_ema8 else "ema8", closes[i], df["Close time text"].iloc[i])
+        create_order("extremium_trend", closes[i], "ema21" if is_under_ema8 else "ema8", closes[i], df["Close time text"].iloc[i])
 
 
 # save result as json file
