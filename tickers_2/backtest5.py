@@ -226,7 +226,7 @@ for i in range(1, len(df)):
                 is_under_ema8 = True
 
         # create_order("extremium_trend", ema21[i] if is_under_ema8 else ema8[i], "ema21" if is_under_ema8 else "ema8", closes[i], df["Close time text"].iloc[i])
-        create_order("extremium_trend", max(df["max values"].iloc[i], closes[i] * 0.995), "ema21" if is_under_ema8 else "ema8", closes[i], df["Close time text"].iloc[i])
+        create_order("extremium_trend", closes[i], "ema21" if is_under_ema8 else "ema8", closes[i], df["Close time text"].iloc[i])
 
 
 # save result as json file
