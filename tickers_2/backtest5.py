@@ -187,7 +187,7 @@ for i in range(1, len(df)):
             # if pnl2 > 1:
                 # close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, 1)
             if closes[i] < stoploss:
-                order[2]="stoploss"
+                order[2]="stoploss" + order[2]
                 pnl2 = 100 - (entry_price / stoploss) * 100
                 close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl2 <= 0 else 1, pnl2)
             elif fastd[i - 1] > 80 and fastd[i] <= 80 and is_bearish_divergence:
