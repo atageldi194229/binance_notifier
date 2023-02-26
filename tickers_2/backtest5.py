@@ -186,7 +186,7 @@ for i in range(1, len(df)):
                 # close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
             # if pnl2 > 1:
                 # close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, 1)
-            if closes[i] < stoploss:
+            if lows[i] < stoploss:
                 order[2]="stoploss_" + order[2]
                 pnl2 = 100 - (entry_price / stoploss) * 100
                 close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl2 <= 0 else 1, pnl2)
