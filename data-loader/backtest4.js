@@ -9,7 +9,7 @@ const PYTHON_COMMAND = process.env.PYTHON_COMMAND || "python3";
 const run_backtest = (file, symbol, interval) => {
   return new Promise((resolve, reject) => {
     const pyprog = spawn(PYTHON_COMMAND, [
-      path.join(__dirname, "../tickers_2/backtest5.py"),
+      path.join(__dirname, "../tickers_2/backtest5_macd.py"),
       file,
       symbol,
       interval,
