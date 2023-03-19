@@ -207,7 +207,7 @@ for i in range(1, len(df)):
                 close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl2 <= 0 else 1, pnl2)
             elif abs(pnl2 * 1.5) <= pnl:
                 order[2]="pnl_" + order[2]
-                close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl2 <= 0 else 1, pnl2)
+                close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl <= 0 else 1, pnl)
             # elif fastd[i - 1] > 80 and fastd[i] <= 80 and is_bearish_divergence:
             #     order[2]="bear_div_" + order[2]
             #     close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
