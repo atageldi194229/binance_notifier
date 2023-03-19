@@ -208,7 +208,8 @@ for i in range(1, len(df)):
             # elif fastd[i - 1] > 80 and fastd[i] <= 80 and is_bearish_divergence:
             #     order[2]="bear_div_" + order[2]
             #     close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
-            elif (ema_type == "ema8" and closes[i] < ema8[i]) or (ema_type == "ema21" and closes[i] < ema21[i]) or (ema_type == "ema55" and closes[i] < ema55[i]):
+            
+            elif pnl > 0 and ((ema_type == "ema8" and closes[i] < ema8[i]) or (ema_type == "ema21" and closes[i] < ema21[i]) or (ema_type == "ema55" and closes[i] < ema55[i])):
                 close_order(order, closes[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
             else:
                 temp_orders.append(order) 
