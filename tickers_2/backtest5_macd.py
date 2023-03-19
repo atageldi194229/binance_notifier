@@ -195,6 +195,7 @@ for i in range(1, len(df)):
         [strategy, stoploss, ema_type, entry_price, entry_time] = order
         pnl = 100 - (entry_price / closes[i]) * 100
         # pnl2 = 100 - (entry_price / highs[i]) * 100
+        pnl2 = 100 - (entry_price / stoploss) * 100
 
         if strategy == "extremium_macd":
             # if pnl > 2:
@@ -203,14 +204,16 @@ for i in range(1, len(df)):
                 # close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, 1)
             if lows[i] < stoploss:
                 order[2]="stoploss_" + order[2]
-                pnl2 = 100 - (entry_price / stoploss) * 100
+                close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl2 <= 0 else 1, pnl2)
+            elif abs(pnl2 * 1.5) <= pnl:
+                order[2]="pnl_" + order[2]
                 close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl2 <= 0 else 1, pnl2)
             # elif fastd[i - 1] > 80 and fastd[i] <= 80 and is_bearish_divergence:
             #     order[2]="bear_div_" + order[2]
             #     close_order(order, lows[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
             
-            elif pnl > 0 and ((ema_type == "ema8" and closes[i] < ema8[i]) or (ema_type == "ema21" and closes[i] < ema21[i]) or (ema_type == "ema55" and closes[i] < ema55[i])):
-                close_order(order, closes[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
+            # elif pnl > 0 and ((ema_type == "ema8" and closes[i] < ema8[i]) or (ema_type == "ema21" and closes[i] < ema21[i]) or (ema_type == "ema55" and closes[i] < ema55[i])):
+            #     close_order(order, closes[i], df["Close time text"].iloc[i], 0 if pnl < 0 else 1, pnl)
             else:
                 temp_orders.append(order) 
     orders = temp_orders
